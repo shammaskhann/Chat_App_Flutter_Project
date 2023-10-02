@@ -8,4 +8,6 @@ class AppColors {
   static const Color asteroidOrange = Color(0xFFFF6F61); // alert notification
   static const Color silverGray = Color(0xFFBEBEBE); // divider & subtitle
   static const Color glowingCyan = Color(0xFF00FFFF); // buttons
+  static const Color black = Color(0xFF000000); // black
+  static const Color white = Color(0xFFFFFFFF); // white
 }

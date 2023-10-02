@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/colors.dart';
+import 'package:flutter_firebase_project_app/controllers/Splash_Controller/splash_controller.dart';
 
 import '../../resources/images.dart';
 
@@ -11,6 +12,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  SplashController splashController = SplashController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    splashController.initSplash(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
