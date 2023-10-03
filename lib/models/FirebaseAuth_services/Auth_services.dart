@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_firebase_project_app/controllers/Auth_Controller/auth_Exception.dart';
+import 'package:flutter_firebase_project_app/controllers/SignupController/auth_Exception.dart';
 
 import '../../Utils/utils.dart';
 
@@ -8,7 +8,8 @@ class AuthServices {
   final auth = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
 
-  Future authSignUp(String email, String password, String phone) async {
+  Future authSignUp(
+      String name, String email, String password, String phone) async {
     await auth
         .createUserWithEmailAndPassword(
       email: email,
@@ -17,6 +18,7 @@ class AuthServices {
         .then((value) async {
       Utils.toastMessage('Account Created Successfully');
       await _db.collection('users').doc(value.user!.uid).set({
+        'name': name,
         'email': email,
         'password': password,
         'phoneNumber': phone,

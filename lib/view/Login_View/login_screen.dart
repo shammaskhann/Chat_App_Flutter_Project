@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/colors.dart';
+import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 
+import '../../Utils/utils.dart';
+import '../../constant/routes.dart';
+import '../../controllers/LoginController/login_controller.dart';
 import '../../resources/images.dart';
+import '../Widgets/CustomWideButton.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,9 +17,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final key = GlobalKey<FormState>();
+  LoginController loginController = LoginController();
+  bool isObsecure = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -50,10 +58,10 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const Spacer(),
             Container(
-              height: MediaQuery.of(context).size.height * 0.55,
+              // height: MediaQuery.of(context).size.height * 0.5,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: AppColors.greyBackGround,
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.white.withOpacity(0.2),
@@ -71,6 +79,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(
+                        height: 20,
+                      ),
                       const Text(
                         'Welcome',
                         style: TextStyle(
@@ -96,79 +107,153 @@ class _LoginScreenState extends State<LoginScreen> {
                           key: key,
                           child: Column(
                             children: [
-                              SizedBox(
+                              //email address
+                              TextFormField(
+                                controller: loginController.emailController,
+                                focusNode: loginController.emailFocusNode,
+                                style: AppTextStyle.textFieldText,
+                                keyboardType: TextInputType.emailAddress,
+                                cursorColor: AppColors.luminousGreen,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Enter Email Address';
+                                  }
+                                  return null;
+                                },
+                                onFieldSubmitted: (value) {
+                                  Utils.fieldFocusChange(
+                                      context,
+                                      loginController.emailFocusNode,
+                                      loginController.passwordFocusNode);
+                                },
+                                decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.only(
+                                      left: 25,
+                                      top: 25,
+                                      bottom: 25,
+                                    ),
+                                    fillColor: AppColors.white,
+                                    hintText: 'Enter Email',
+                                    hintStyle: AppTextStyle.inputTextFieldHint,
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: BorderSide.none),
+                                    filled: true,
+                                    prefixIcon: const Icon(
+                                      Icons.email,
+                                      color: AppColors.silverGray,
+                                    )),
+                              ),
+                              const SizedBox(
                                 height: 10,
                               ),
+                              //PassWord
                               TextFormField(
+                                controller: loginController.passwordController,
+                                focusNode: loginController.passwordFocusNode,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'Enter Password';
+                                  }
+                                  return null;
+                                },
+                                onFieldSubmitted: (value) {
+                                  loginController.passwordFocusNode.unfocus();
+                                },
+                                style: AppTextStyle.textFieldText,
+                                obscureText: isObsecure,
+                                obscuringCharacter: '•',
+                                cursorColor: AppColors.primaryColor,
                                 decoration: InputDecoration(
-                                  hintText: 'Email',
-                                  hintStyle: TextStyle(
-                                      color: AppColors.primaryColor,
-                                      fontSize: 16,
-                                      fontFamily: 'Mont'),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
+                                    contentPadding: const EdgeInsets.only(
+                                      left: 25,
+                                      top: 25,
+                                      bottom: 25,
                                     ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
+                                    fillColor: AppColors.white,
+                                    hintText: 'Enter Password',
+                                    hintStyle: AppTextStyle.inputTextFieldHint,
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                        borderSide: BorderSide.none),
+                                    filled: true,
+                                    prefixIcon: const Icon(
+                                      Icons.lock,
+                                      color: AppColors.silverGray,
                                     ),
-                                    borderSide: BorderSide(
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide(
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ),
-                                ),
-                                style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontSize: 16,
-                                    fontFamily: 'Mont'),
+                                    suffixIcon: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          isObsecure = !isObsecure;
+                                          setState(() {});
+                                        });
+                                      },
+                                      child: Icon(
+                                        isObsecure
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        color: AppColors.silverGray,
+                                      ),
+                                    )),
                               ),
-                              SizedBox(
-                                height: 10,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: Switch(
+                                        inactiveTrackColor:
+                                            AppColors.silverGray,
+                                        activeColor: AppColors.luminousGreen,
+                                        value: loginController.isRememberMe,
+                                        onChanged: (value) {
+                                          loginController.isRememberMe = value;
+                                          setState(() {});
+                                        }),
+                                  ),
+                                  const Text(
+                                    'Remember me',
+                                    style: AppTextStyle.subtitle,
+                                  ),
+                                  const Spacer(),
+                                  TextButton(
+                                      onPressed: () {},
+                                      child: const Text(
+                                        'Forgot Password',
+                                        style: AppTextStyle.subtitle,
+                                      )),
+                                ],
                               ),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: 'Password',
-                                  hintStyle: TextStyle(
-                                      color: AppColors.primaryColor,
-                                      fontSize: 16,
-                                      fontFamily: 'Mont'),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide(
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide(
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ),
-                                ),
-                                style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontSize: 16,
-                                    fontFamily: 'Mont'),
+                              //Login Button
+                              CustomButton(
+                                title: 'Login',
+                                loading: loginController.loading,
+                                onPressed: () {
+                                  if (key.currentState!.validate()) {
+                                    loginController.login(context);
+                                  }
+                                },
+                              ),
+                              Center(
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.signupScreen);
+                                    },
+                                    child: RichText(
+                                      text: const TextSpan(
+                                          text: 'Don\'t have an account? ',
+                                          style: AppTextStyle.subtitle,
+                                          children: [
+                                            TextSpan(
+                                              text: 'Sign Up',
+                                              style: TextStyle(
+                                                color: AppColors.luminousGreen,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          ]),
+                                    )),
                               ),
                             ],
                           )),

@@ -1,3 +1,5 @@
+import 'package:flutter_firebase_project_app/Utils/utils.dart';
+
 class AuthException {
   static void authExceptionToast(String error) {
     String errorMessage = "An Error Occured";
@@ -21,6 +23,7 @@ class AuthException {
         errorMessage = error.toString();
         break;
     }
+    Utils.toastMessage(errorMessage);
     //Utils.snackBar('Error', errorMessage);
   }
 }
