@@ -21,11 +21,9 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   SignUpController signUpController = SignUpController();
   final key = GlobalKey<FormState>();
-  bool isObsecure = true;
-  File? _avatarImage;
   final AvatarController _controller = AvatarController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  static File? avatarImage;
+  bool isObsecure = true;
   Future<void> _pickImage(ImageSource source) async {
     final File? image = (source == ImageSource.gallery)
         ? await _controller.pickImageFromGallery()
@@ -33,16 +31,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
     if (image != null) {
       setState(() {
-        _avatarImage = image;
+        avatarImage = image;
       });
-    }
-  }
-
-  Future<void> _saveAvatar() async {
-    final User? user = _auth.currentUser;
-    print(_avatarImage);
-    if (user != null && _avatarImage != null) {
-      await _controller.uploadImageToFirebaseStorage(_avatarImage!, user.uid);
     }
   }
 
@@ -58,9 +48,6 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  //Create A ImagePicker Widget with Avatar
-                  //Create A Text Widget with Text "Create Account"
-                  //Create A Text Widget with Text "Please fill the input below here"
                   const Text(
                     'Create Account',
                     style: AppTextStyle.heading,
@@ -74,14 +61,16 @@ class _SignupScreenState extends State<SignupScreen> {
                         CircleAvatar(
                           radius: 50,
                           backgroundColor: AppColors.silverGray,
-                          backgroundImage: (_avatarImage != null)
-                              ? FileImage(_avatarImage!)
+                          backgroundImage: (avatarImage != null)
+                              ? FileImage(avatarImage!)
                               : null,
-                          child: const Icon(
-                            Icons.person,
-                            size: 50,
-                            color: AppColors.primaryColor,
-                          ),
+                          child: (avatarImage == null)
+                              ? const Icon(
+                                  Icons.person,
+                                  size: 50,
+                                  color: AppColors.primaryColor,
+                                )
+                              : null,
                         ),
                         Positioned(
                           bottom: 0,
@@ -89,8 +78,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: InkWell(
                             onTap: () {
                               // signUpController.pickImage();
-                              _pickImage(ImageSource.camera);
-                              _saveAvatar();
+                              _pickImage(ImageSource.gallery);
                               // AvatarController().uploadImageToFirebaseStorage(
                               //     _avatarImage!, _auth.currentUser!.uid);
                               //_saveAvatar();
@@ -115,9 +103,16 @@ class _SignupScreenState extends State<SignupScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Form(
+                      key: key,
                       child: Column(
                         children: [
                           TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your name';
+                              }
+                              return null;
+                            },
                             controller: signUpController.nameController,
                             focusNode: signUpController.nameFocusNode,
                             style: AppTextStyle.inputSignupTextFieldHint,
@@ -166,6 +161,12 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: 20,
                           ),
                           TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your email';
+                              }
+                              return null;
+                            },
                             controller: signUpController.emailController,
                             focusNode: signUpController.emailFocusNode,
                             style: AppTextStyle.inputSignupTextFieldHint,
@@ -214,6 +215,12 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: 20,
                           ),
                           TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your password';
+                              }
+                              return null;
+                            },
                             controller: signUpController.passwordController,
                             focusNode: signUpController.passwordFocusNode,
                             style: AppTextStyle.inputSignupTextFieldHint,
@@ -276,13 +283,19 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: 20,
                           ),
                           TextFormField(
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your phone number';
+                              }
+                              return null;
+                            },
                             controller: signUpController.phoneNumberController,
                             focusNode: signUpController.phoneNumberFocusNode,
                             style: AppTextStyle.inputSignupTextFieldHint,
                             keyboardType: TextInputType.phone,
                             textInputAction: TextInputAction.done,
                             onFieldSubmitted: (value) {
-                              signUpController.signUp(context);
+                              signUpController.signUp(context, avatarImage!);
                             },
                             decoration: InputDecoration(
                               prefixIcon: const Icon(
@@ -328,8 +341,13 @@ class _SignupScreenState extends State<SignupScreen> {
                       title: "Sign Up",
                       loading: signUpController.loading,
                       onPressed: () {
-                        signUpController.signUp(context);
-                      })
+                        if (key.currentState!.validate()) {
+                          setState(() {
+                            signUpController.loading = true;
+                          });
+                          signUpController.signUp(context, avatarImage!);
+                        }
+                      }),
                 ],
               ),
             ),

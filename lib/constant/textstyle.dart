@@ -33,4 +33,16 @@ class AppTextStyle {
     fontSize: 36,
     fontWeight: FontWeight.bold,
   );
+  static const TextStyle MessageTileName = TextStyle(
+    color: AppColors.white,
+    fontFamily: 'Mont',
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+  );
+  static const TextStyle MessageTilesubtitle = TextStyle(
+    color: AppColors.white,
+    fontFamily: 'Mont',
+    fontSize: 15,
+    fontWeight: FontWeight.w300,
+  );
 }

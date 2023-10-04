@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/routes.dart';
 import 'package:flutter_firebase_project_app/firebase_options.dart';
+import 'package:flutter_firebase_project_app/view/Chat_view/Chat_screen.dart';
 import 'package:flutter_firebase_project_app/view/Login_View/login_screen.dart';
 import 'package:flutter_firebase_project_app/view/Signup_View/signup_screen.dart';
 
@@ -50,6 +51,14 @@ class MyApp extends StatelessWidget {
         if (settings.name == AppRoutes.homeScreen) {
           return MaterialPageRoute(
             builder: (context) => const HomeScreen(),
+          );
+        }
+        if (settings.name == AppRoutes.chatScreen) {
+          final args = settings.arguments;
+          return MaterialPageRoute(
+            builder: (context) => ChatScreen(
+              uid: args as String,
+            ),
           );
         }
         return null;
