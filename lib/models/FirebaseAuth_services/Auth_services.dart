@@ -42,7 +42,6 @@ class AuthServices {
       return true;
     }).catchError((error) {
       AuthException.authExceptionToast(error.code);
-      Utils.toastMessage('Login Failed');
       return false;
     });
   }

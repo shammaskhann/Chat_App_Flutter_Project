@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/colors.dart';
 import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/AvatarControllor/avatar_controller.dart';
+import 'package:flutter_firebase_project_app/controllers/ChatController/chat_controller.dart';
 import 'package:flutter_firebase_project_app/models/UserInfo_services/userinfo_services.dart';
 
 import '../../models/RecieverInfo_services/recieverinfo_services.dart';
@@ -17,6 +19,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   RecieverInfoServices _recieverInfoServices = RecieverInfoServices();
   AvatarController _avatarController = AvatarController();
+  TextEditingController _messageController = TextEditingController();
+  ChatController _chatController = ChatController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,8 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return Text(
                           snapshot.data.toString(),
-                          style: AppTextStyle.heading
-                              .copyWith(color: AppColors.white),
+                          style: AppTextStyle.heading,
                         );
                       }
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -77,8 +80,85 @@ class _ChatScreenState extends State<ChatScreen> {
                     })
               ],
             ),
-            Spacer(),
-            SizedBox(
+            Expanded(
+              child: StreamBuilder(
+                stream: _chatController.getMessages(widget.uid),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    // Reverse the order of messages to start from the bottom
+                    final reversedMessages =
+                        snapshot.data!.docs.reversed.toList();
+                    return ListView.builder(
+                      reverse: true, // Start from the bottom
+                      itemCount: reversedMessages.length,
+                      itemBuilder: (context, index) {
+                        final message = reversedMessages[index]['message'];
+                        final isMyMessage =
+                            reversedMessages[index]['senderUid'] == widget.uid;
+                        final timestamp = reversedMessages[index]['timestamp'];
+                        final dateTime =
+                            (timestamp != null && timestamp is Timestamp)
+                                ? timestamp.toDate()
+                                : DateTime.now();
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: isMyMessage
+                                ? CrossAxisAlignment.end
+                                : CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${dateTime.hour}:${dateTime.minute}',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: isMyMessage
+                                      ? const Color(0xFF272A35)
+                                      : const Color(0xFF373E4E),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.all(8),
+                                child: Text(
+                                  message,
+                                  style: TextStyle(
+                                    color: isMyMessage
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+                // if (snapshot.hasData) {
+                //   return ListView.builder(
+                //     itemCount: snapshot.data!.docs.length,
+                //     itemBuilder: (context, index) {
+                //       return ListTile(
+                //         title: Text(snapshot.data!.docs[index]['message']),
+                //       );
+                //     },
+                //   );
+                // } else {
+                //   return const Center(
+                //     child: CircularProgressIndicator(),
+                //   );
+                // }
+              ),
+            ),
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -94,10 +174,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     const SizedBox(
                       width: 10,
                     ),
-                    const Expanded(
+                    Expanded(
                       flex: 2,
                       child: TextField(
-                        decoration: InputDecoration(
+                        controller: _messageController,
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Type a message',
                           hintStyle: TextStyle(
@@ -115,7 +196,12 @@ class _ChatScreenState extends State<ChatScreen> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          print('Send Button Pressed Reciever${widget.uid}');
+                          _chatController.sendMessage(
+                              widget.uid, _messageController.text);
+                          _messageController.clear();
+                        },
                         icon: const Icon(
                           Icons.send,
                           color: AppColors.white,

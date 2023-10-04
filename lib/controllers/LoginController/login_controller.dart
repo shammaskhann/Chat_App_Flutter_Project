@@ -27,7 +27,6 @@ class LoginController {
     isLogin = await authServices.authLogin(
         emailController.text.trim(), passwordController.text.trim());
     if (isLogin) {
-      dispose();
       Navigator.pushNamed(context, AppRoutes.homeScreen);
       loading = false;
     } else {

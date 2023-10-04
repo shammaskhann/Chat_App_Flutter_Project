@@ -231,6 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 onPressed: () {
                                   if (key.currentState!.validate()) {
                                     loginController.login(context);
+                                    setState(() {});
                                   }
                                 },
                               ),
