@@ -5,6 +5,8 @@ import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/AvatarControllor/avatar_controller.dart';
 import 'package:flutter_firebase_project_app/controllers/ChatController/chat_controller.dart';
 import 'package:flutter_firebase_project_app/models/UserInfo_services/userinfo_services.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 
 import '../../models/RecieverInfo_services/recieverinfo_services.dart';
 
@@ -215,20 +217,58 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: AppColors.luminousGreen,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.camera_alt,
-                        color: AppColors.white,
+                  child: FocusedMenuHolder(
+                    blurSize: 10.0,
+                    menuOffset: 10.0,
+                    animateMenuItems: true,
+                    menuWidth: MediaQuery.of(context).size.width * 0.50,
+                    openWithTap: true,
+                    menuItems: <FocusedMenuItem>[
+                      FocusedMenuItem(
+                        title: Text("Take Photo"),
+                        trailingIcon: Icon(Icons.camera_alt),
+                        onPressed: () {},
+                      ),
+                      FocusedMenuItem(
+                        title: Text("Upload Gallery"),
+                        trailingIcon: Icon(Icons.photo_library),
+                        onPressed: () {},
+                      ),
+                      FocusedMenuItem(
+                        title: Text("Send Voice"),
+                        trailingIcon: Icon(Icons.mic),
+                        onPressed: () {},
+                      ),
+                    ],
+                    onPressed: () {},
+                    child: ClipRRect(
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: AppColors.luminousGreen,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          color: AppColors.white,
+                        ),
                       ),
                     ),
                   ),
+                  // child: Container(
+                  //   height: 50,
+                  //   decoration: BoxDecoration(
+                  //     color: AppColors.luminousGreen,
+                  //     borderRadius: BorderRadius.circular(10),
+                  //   ),
+                  //   child: IconButton(
+                  //     onPressed: () {},
+                  //     icon: const Icon(
+                  //       Icons.camera_alt,
+                  //       color: AppColors.white,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
               ],
             ),
