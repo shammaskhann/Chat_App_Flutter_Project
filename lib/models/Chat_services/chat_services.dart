@@ -12,12 +12,21 @@ class ChatServices {
     return _db.collection('users').get();
   }
 
-  // Function to send a message
-  void sendMessage(String chatId, String senderUid, String message) {
+  // // Function to send a message
+  // void sendMessage(String chatId, String senderUid, String message) {
+  //   chatCollection.doc(chatId).collection('messages').add({
+  //     'senderUid': senderUid,
+  //     'message': message,
+  //     'timestamp': FieldValue.serverTimestamp(),
+  //   });
+  // }
+  void sendMessage(String chatId, String message, String senderUid,
+      {bool isMedia = false}) {
     chatCollection.doc(chatId).collection('messages').add({
       'senderUid': senderUid,
       'message': message,
       'timestamp': FieldValue.serverTimestamp(),
+      'isMedia': isMedia, // Add this flag to indicate if it's media
     });
   }
 

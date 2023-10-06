@@ -4,4 +4,5 @@ class AppRoutes {
   static const String signupScreen = '/signup';
   static const String homeScreen = '/home';
   static const String chatScreen = '/chat';
+  static const String voiceRecordingScreen = '/voiceRecording';
 }

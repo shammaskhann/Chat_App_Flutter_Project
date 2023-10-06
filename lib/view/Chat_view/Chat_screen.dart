@@ -1,12 +1,18 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_project_app/Utils/utils.dart';
 import 'package:flutter_firebase_project_app/constant/colors.dart';
 import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/AvatarControllor/avatar_controller.dart';
 import 'package:flutter_firebase_project_app/controllers/ChatController/chat_controller.dart';
-import 'package:flutter_firebase_project_app/models/UserInfo_services/userinfo_services.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
+import 'package:flutter_firebase_project_app/view/Chat_view/widgets/PopUpMenu.dart';
+import 'package:flutter_firebase_project_app/view/Widgets/VoiceNotePlayer.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import '../../models/RecieverInfo_services/recieverinfo_services.dart';
 
@@ -98,10 +104,147 @@ class _ChatScreenState extends State<ChatScreen> {
                         final isMyMessage =
                             reversedMessages[index]['senderUid'] == widget.uid;
                         final timestamp = reversedMessages[index]['timestamp'];
+                        final isMedia = reversedMessages[index]['isMedia'];
                         final dateTime =
                             (timestamp != null && timestamp is Timestamp)
                                 ? timestamp.toDate()
                                 : DateTime.now();
+                        String mediaUrl = message;
+                        if (isMedia) {
+                          if (mediaUrl.contains(".mp3")) {
+                            final AssetsAudioPlayer _assetsAudioPlayer =
+                                AssetsAudioPlayer();
+                            //AudioPlayer audioPlayer = AudioPlayer();
+                            try {
+                              log("Accesing Voice Note Player");
+                              log("mediaUrl: $mediaUrl");
+
+                              return InkWell(
+                                onTap: () {
+                                  _assetsAudioPlayer.open(
+                                    Audio.network(mediaUrl),
+                                    autoStart: true,
+                                    showNotification: true,
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: isMyMessage
+                                        ? CrossAxisAlignment.end
+                                        : CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${dateTime.hour}:${dateTime.minute}',
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.4,
+                                          decoration: BoxDecoration(
+                                            color: isMyMessage
+                                                ? const Color(0xFF272A35)
+                                                : const Color(0xFF373E4E),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          padding: const EdgeInsets.all(8),
+                                          child: Row(children: [
+                                            IconButton(
+                                                onPressed: () {},
+                                                icon: const Icon(
+                                                  Icons.play_arrow,
+                                                  color: Colors.white,
+                                                )),
+                                            const Spacer(),
+                                            const Text(
+                                              "00:00",
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ])),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } catch (e) {
+                              Utils.toastMessage(e.toString());
+                            }
+                          } else {
+                            log("mediaUrl: $mediaUrl");
+                            log("Accesing Image Viewer");
+
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Scaffold(
+                                      body: Center(
+                                        child: Image.network(message),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: isMyMessage
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${dateTime.hour}:${dateTime.minute}',
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: isMyMessage
+                                            ? const Color(0xFF272A35)
+                                            : const Color(0xFF373E4E),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      padding: const EdgeInsets.all(8),
+                                      child: Image.network(message,
+                                          width: 200, height: 200,
+                                          loadingBuilder: (BuildContext context,
+                                              Widget child,
+                                              ImageChunkEvent?
+                                                  loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        }
+                                        return Container(
+                                          width: 200,
+                                          height: 200,
+                                          child: Shimmer.fromColors(
+                                            baseColor: Colors.grey.shade300,
+                                            highlightColor:
+                                                Colors.grey.shade100,
+                                            child: Container(
+                                              width: 200,
+                                              height: 200,
+                                              color: Colors.black26,
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        }
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -144,20 +287,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     );
                   }
                 },
-                // if (snapshot.hasData) {
-                //   return ListView.builder(
-                //     itemCount: snapshot.data!.docs.length,
-                //     itemBuilder: (context, index) {
-                //       return ListTile(
-                //         title: Text(snapshot.data!.docs[index]['message']),
-                //       );
-                //     },
-                //   );
-                // } else {
-                //   return const Center(
-                //     child: CircularProgressIndicator(),
-                //   );
-                // }
               ),
             ),
             const SizedBox(
@@ -217,58 +346,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 Expanded(
                   flex: 1,
-                  child: FocusedMenuHolder(
-                    blurSize: 10.0,
-                    menuOffset: 10.0,
-                    animateMenuItems: true,
-                    menuWidth: MediaQuery.of(context).size.width * 0.50,
-                    openWithTap: true,
-                    menuItems: <FocusedMenuItem>[
-                      FocusedMenuItem(
-                        title: Text("Take Photo"),
-                        trailingIcon: Icon(Icons.camera_alt),
-                        onPressed: () {},
-                      ),
-                      FocusedMenuItem(
-                        title: Text("Upload Gallery"),
-                        trailingIcon: Icon(Icons.photo_library),
-                        onPressed: () {},
-                      ),
-                      FocusedMenuItem(
-                        title: Text("Send Voice"),
-                        trailingIcon: Icon(Icons.mic),
-                        onPressed: () {},
-                      ),
-                    ],
-                    onPressed: () {},
-                    child: ClipRRect(
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: AppColors.luminousGreen,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(
-                          Icons.add,
-                          color: AppColors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  // child: Container(
-                  //   height: 50,
-                  //   decoration: BoxDecoration(
-                  //     color: AppColors.luminousGreen,
-                  //     borderRadius: BorderRadius.circular(10),
-                  //   ),
-                  //   child: IconButton(
-                  //     onPressed: () {},
-                  //     icon: const Icon(
-                  //       Icons.camera_alt,
-                  //       color: AppColors.white,
-                  //     ),
-                  //   ),
-                  // ),
+                  child: MediaPopUpMenu(uid: widget.uid),
                 ),
               ],
             ),
