@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../Utils/utils.dart';
 import '../../constant/colors.dart';
 import '../../controllers/VoiceNoteController/voicenote_controller.dart';
 
@@ -12,8 +13,7 @@ class VoiceRecBottomSheet extends StatefulWidget {
 }
 
 class _VoiceRecBottomSheetState extends State<VoiceRecBottomSheet> {
-  final VoiceNoteController _voiceNoteController =
-      VoiceNoteController(); // Declare it here
+  final VoiceNoteController _voiceNoteController = VoiceNoteController();
 
   bool isRecording = false;
 
@@ -33,11 +33,13 @@ class _VoiceRecBottomSheetState extends State<VoiceRecBottomSheet> {
           onTap: () async {
             if (!isRecording) {
               await _voiceNoteController.startRecording();
+              Utils.toastMessage('Recording Started');
               setState(() {
                 isRecording = true;
               });
             } else {
               await _voiceNoteController.stopRecording(widget.uid);
+              Utils.toastMessage('Recording Stopped');
               setState(() {
                 isRecording = false;
               });

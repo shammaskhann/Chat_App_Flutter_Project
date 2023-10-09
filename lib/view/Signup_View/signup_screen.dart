@@ -78,7 +78,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: InkWell(
                             onTap: () {
                               // signUpController.pickImage();
-                              _pickImage(ImageSource.gallery);
+                              _pickImage(ImageSource.camera);
                               // AvatarController().uploadImageToFirebaseStorage(
                               //     _avatarImage!, _auth.currentUser!.uid);
                               //_saveAvatar();
@@ -294,9 +294,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             style: AppTextStyle.inputSignupTextFieldHint,
                             keyboardType: TextInputType.phone,
                             textInputAction: TextInputAction.done,
-                            onFieldSubmitted: (value) {
-                              signUpController.signUp(context, avatarImage!);
-                            },
+                            onFieldSubmitted: (value) {},
                             decoration: InputDecoration(
                               prefixIcon: const Icon(
                                 Icons.phone,
@@ -341,6 +339,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       title: "Sign Up",
                       loading: signUpController.loading,
                       onPressed: () {
+                        if (avatarImage == null) {
+                          Utils.toastMessage('Please select your avatar');
+                          return;
+                        }
                         if (key.currentState!.validate()) {
                           setState(() {
                             signUpController.loading = true;

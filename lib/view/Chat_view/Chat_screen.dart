@@ -70,7 +70,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return Text(
                           snapshot.data.toString(),
-                          style: AppTextStyle.heading,
+                          style: AppTextStyle.heading.copyWith(
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.07),
                         );
                       }
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -119,57 +121,53 @@ class _ChatScreenState extends State<ChatScreen> {
                               log("Accesing Voice Note Player");
                               log("mediaUrl: $mediaUrl");
 
-                              return InkWell(
-                                onTap: () {
-                                  _assetsAudioPlayer.open(
-                                    Audio.network(mediaUrl),
-                                    autoStart: true,
-                                    showNotification: true,
-                                  );
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: isMyMessage
-                                        ? CrossAxisAlignment.end
-                                        : CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${dateTime.hour}:${dateTime.minute}',
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                        ),
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: isMyMessage
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${dateTime.hour}:${dateTime.minute}',
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12,
                                       ),
-                                      Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.4,
-                                          decoration: BoxDecoration(
-                                            color: isMyMessage
-                                                ? const Color(0xFF272A35)
-                                                : const Color(0xFF373E4E),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
+                                    ),
+                                    Container(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
+                                        decoration: BoxDecoration(
+                                          color: isMyMessage
+                                              ? const Color(0xFF272A35)
+                                              : const Color(0xFF373E4E),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        padding: const EdgeInsets.all(8),
+                                        child: Row(children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                _assetsAudioPlayer.open(
+                                                  Audio.network(mediaUrl),
+                                                  autoStart: true,
+                                                  showNotification: true,
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                Icons.play_arrow,
+                                                color: Colors.white,
+                                              )),
+                                          const Spacer(),
+                                          const Text(
+                                            "00:00",
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
-                                          padding: const EdgeInsets.all(8),
-                                          child: Row(children: [
-                                            IconButton(
-                                                onPressed: () {},
-                                                icon: const Icon(
-                                                  Icons.play_arrow,
-                                                  color: Colors.white,
-                                                )),
-                                            const Spacer(),
-                                            const Text(
-                                              "00:00",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ])),
-                                    ],
-                                  ),
+                                        ])),
+                                  ],
                                 ),
                               );
                             } catch (e) {
