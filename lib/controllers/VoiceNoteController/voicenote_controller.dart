@@ -59,7 +59,6 @@ class VoiceNoteController {
           .child('${DateTime.now().millisecondsSinceEpoch}.mp3');
 
       try {
-        // Upload the recording to Firebase Storage
         await storageReference.putFile(File(_recordingpath));
         final mediaUrl = await storageReference.getDownloadURL();
         _chatServices.sendMessage(

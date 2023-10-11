@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../../Utils/utils.dart';
@@ -38,11 +40,12 @@ class _VoiceRecBottomSheetState extends State<VoiceRecBottomSheet> {
                 isRecording = true;
               });
             } else {
-              await _voiceNoteController.stopRecording(widget.uid);
-              Utils.toastMessage('Recording Stopped');
               setState(() {
                 isRecording = false;
               });
+              log('Recording Stopped');
+              await _voiceNoteController.stopRecording(widget.uid);
+              Utils.toastMessage('Recording Stopped');
             }
           },
           child: Container(

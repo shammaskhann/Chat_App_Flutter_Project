@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 class ChatServices {
   final auth = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
-  // Replace 'yourCollectionName' with the name you want to use.
   CollectionReference chatCollection =
       FirebaseFirestore.instance.collection('chats');
 
@@ -26,11 +25,10 @@ class ChatServices {
       'senderUid': senderUid,
       'message': message,
       'timestamp': FieldValue.serverTimestamp(),
-      'isMedia': isMedia, // Add this flag to indicate if it's media
+      'isMedia': isMedia,
     });
   }
 
-// Function to listen for new messages in a chat
   Stream<QuerySnapshot> getChatMessagesStream(String chatId) {
     return chatCollection
         .doc(chatId)
@@ -49,8 +47,16 @@ class ChatServices {
   //         .orderBy('timestamp')
   //         .snapshots();
   //   } else {
-  //     // Return an empty stream if the document does not exist
   //     yield* Stream.empty();
   //   }
   // }
+  Stream<QuerySnapshot<Map<String, dynamic>>> lastMessage(
+      String chatDocumentID) {
+    return chatCollection
+        .doc(chatDocumentID)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .snapshots();
+  }
 }

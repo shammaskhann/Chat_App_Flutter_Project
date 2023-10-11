@@ -122,4 +122,11 @@ class ChatController {
       );
     }
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> lastMessege(String recieverUID) {
+    final user = auth.currentUser;
+    String chatDocumentId = '${user!.uid}_${recieverUID}';
+    log('chatDocumentId: $chatDocumentId');
+    return _chatServices.lastMessage(chatDocumentId);
+  }
 }

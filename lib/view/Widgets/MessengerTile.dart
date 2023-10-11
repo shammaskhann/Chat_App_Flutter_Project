@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/AvatarControllor/avatar_controller.dart';
+import 'package:flutter_firebase_project_app/controllers/ChatController/chat_controller.dart';
 
 import '../../constant/colors.dart';
 import '../../constant/routes.dart';
@@ -13,6 +14,7 @@ class MessengerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AvatarController _avatarController = AvatarController();
+    ChatController _chatController = ChatController();
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
         child: InkWell(
@@ -45,11 +47,28 @@ class MessengerTile extends StatelessWidget {
               name,
               style: AppTextStyle.MessageTileName,
             ),
-            subtitle: Text(
-              "This is the last message",
-              style: AppTextStyle.MessageTilesubtitle,
+            subtitle: StreamBuilder(
+              stream: _chatController.lastMessege(uid),
+              builder: ((context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text(
+                    "Loading...",
+                    style: AppTextStyle.MessageTilesubtitle,
+                  );
+                }
+                if (snapshot.hasData) {
+                  return Text(
+                    snapshot.data!.docs[0]['message'],
+                    style: AppTextStyle.MessageTilesubtitle,
+                  );
+                }
+                return const Text(
+                  "No message",
+                  style: AppTextStyle.MessageTilesubtitle,
+                );
+              }),
             ),
-            trailing: Column(
+            trailing: const Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(

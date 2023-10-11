@@ -102,6 +102,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       reverse: true, // Start from the bottom
                       itemCount: reversedMessages.length,
                       itemBuilder: (context, index) {
+                        //if
                         final message = reversedMessages[index]['message'];
                         final isMyMessage =
                             reversedMessages[index]['senderUid'] == widget.uid;
@@ -190,54 +191,59 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 );
                               },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: isMyMessage
-                                      ? CrossAxisAlignment.end
-                                      : CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${dateTime.hour}:${dateTime.minute}',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
+                              child: GestureDetector(
+                                onLongPress: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: isMyMessage
+                                        ? CrossAxisAlignment.end
+                                        : CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${dateTime.hour}:${dateTime.minute}',
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                        ),
                                       ),
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: isMyMessage
-                                            ? const Color(0xFF272A35)
-                                            : const Color(0xFF373E4E),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      padding: const EdgeInsets.all(8),
-                                      child: Image.network(message,
-                                          width: 200, height: 200,
-                                          loadingBuilder: (BuildContext context,
-                                              Widget child,
-                                              ImageChunkEvent?
-                                                  loadingProgress) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        return Container(
-                                          width: 200,
-                                          height: 200,
-                                          child: Shimmer.fromColors(
-                                            baseColor: Colors.grey.shade300,
-                                            highlightColor:
-                                                Colors.grey.shade100,
-                                            child: Container(
-                                              width: 200,
-                                              height: 200,
-                                              color: Colors.black26,
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: isMyMessage
+                                              ? const Color(0xFF272A35)
+                                              : const Color(0xFF373E4E),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        padding: const EdgeInsets.all(8),
+                                        child: Image.network(message,
+                                            width: 200,
+                                            height: 200, loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child;
+                                          }
+                                          return Container(
+                                            width: 200,
+                                            height: 200,
+                                            child: Shimmer.fromColors(
+                                              baseColor: Colors.grey.shade300,
+                                              highlightColor:
+                                                  Colors.grey.shade100,
+                                              child: Container(
+                                                width: 200,
+                                                height: 200,
+                                                color: Colors.black26,
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      }),
-                                    ),
-                                  ],
+                                          );
+                                        }),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );

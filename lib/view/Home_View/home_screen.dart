@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/colors.dart';
 import 'package:flutter_firebase_project_app/constant/textstyle.dart';
+import 'package:flutter_firebase_project_app/controllers/ChatController/chat_controller.dart';
 import 'package:flutter_firebase_project_app/models/Chat_services/chat_services.dart';
 import 'package:flutter_firebase_project_app/view/Home_View/Drawer/drawer.dart';
 import 'package:flutter_firebase_project_app/view/Widgets/MessengerTile.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final user = FirebaseAuth.instance.currentUser;
   ChatServices _chatServices = ChatServices();
   @override
   Widget build(BuildContext context) {
@@ -75,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Chatrooms', style: AppTextStyle.heading),
+                  const Text('Chatrooms', style: AppTextStyle.heading),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.2,
                     child: ListView.builder(
@@ -98,10 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         return ListView.builder(
                           itemCount: snapshot.data.docs.length,
                           itemBuilder: (context, index) {
-                            return MessengerTile(
-                              uid: snapshot.data.docs[index]['uid'],
-                              name: snapshot.data.docs[index]['name'],
-                            );
+                            if (user!.uid != snapshot.data.docs[index]['uid']) {
+                              return MessengerTile(
+                                uid: snapshot.data.docs[index]['uid'],
+                                name: snapshot.data.docs[index]['name'],
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
                           },
                         );
                       } else {
