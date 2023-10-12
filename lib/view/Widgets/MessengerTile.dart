@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/AvatarControllor/avatar_controller.dart';
@@ -15,6 +16,7 @@ class MessengerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     AvatarController _avatarController = AvatarController();
     ChatController _chatController = ChatController();
+    var timestamp;
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
         child: InkWell(
@@ -56,9 +58,24 @@ class MessengerTile extends StatelessWidget {
                     style: AppTextStyle.MessageTilesubtitle,
                   );
                 }
+                if (snapshot.data!.docs.isEmpty) {
+                  return const Text(
+                    "No message",
+                    style: AppTextStyle.MessageTilesubtitle,
+                  );
+                }
                 if (snapshot.hasData) {
+                  bool isMedia = snapshot.data!.docs[0]['isMedia'];
+                  String msg = snapshot.data!.docs[0]['message'];
+                  timestamp = snapshot.data!.docs[0]['timestamp'];
+                  if (isMedia) {
+                    return const Text(
+                      "Photo",
+                      style: AppTextStyle.MessageTilesubtitle,
+                    );
+                  }
                   return Text(
-                    snapshot.data!.docs[0]['message'],
+                    msg,
                     style: AppTextStyle.MessageTilesubtitle,
                   );
                 }
@@ -68,14 +85,44 @@ class MessengerTile extends StatelessWidget {
                 );
               }),
             ),
-            trailing: const Column(
+            trailing: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
-                  "12:00",
-                  style: AppTextStyle.MessageTilesubtitle,
-                ),
-                CircleAvatar(
+                StreamBuilder(
+                    stream: _chatController.lastMessege(uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Text(
+                          "Loading...",
+                          style: AppTextStyle.MessageTilesubtitle,
+                        );
+                      }
+                      if (snapshot.data!.docs.isEmpty) {
+                        return const Text(
+                          "",
+                          style: AppTextStyle.MessageTilesubtitle,
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        timestamp = snapshot.data!.docs[0]['timestamp'];
+                        final dateTime =
+                            (timestamp != null && timestamp is Timestamp)
+                                ? timestamp.toDate()
+                                : DateTime.now();
+                        return Text(
+                          '${dateTime.hour}:${dateTime.minute}',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        );
+                      }
+                      return const Text(
+                        "",
+                        style: AppTextStyle.MessageTilesubtitle,
+                      );
+                    }),
+                const CircleAvatar(
                   radius: 10,
                   backgroundColor: AppColors.luminousGreen,
                   child: Text(

@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +8,7 @@ import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/AvatarControllor/avatar_controller.dart';
 import 'package:flutter_firebase_project_app/controllers/ChatController/chat_controller.dart';
 import 'package:flutter_firebase_project_app/view/Chat_view/widgets/PopUpMenu.dart';
-import 'package:flutter_firebase_project_app/view/Widgets/VoiceNotePlayer.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 import '../../models/RecieverInfo_services/recieverinfo_services.dart';
 
@@ -96,22 +92,29 @@ class _ChatScreenState extends State<ChatScreen> {
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
                     // Reverse the order of messages to start from the bottom
+                    //snapshot.data!.docs[0].reference.update({'isRead': true});
                     final reversedMessages =
                         snapshot.data!.docs.reversed.toList();
+
                     return ListView.builder(
-                      reverse: true, // Start from the bottom
+                      reverse: true,
                       itemCount: reversedMessages.length,
                       itemBuilder: (context, index) {
-                        //if
                         final message = reversedMessages[index]['message'];
                         final isMyMessage =
                             reversedMessages[index]['senderUid'] == widget.uid;
                         final timestamp = reversedMessages[index]['timestamp'];
                         final isMedia = reversedMessages[index]['isMedia'];
+                        final isSeen = reversedMessages[index]['isRead'];
                         final dateTime =
                             (timestamp != null && timestamp is Timestamp)
                                 ? timestamp.toDate()
                                 : DateTime.now();
+                        // if (!isMyMessage) {
+                        //   snapshot.data!.docs[index].reference.update({
+                        //     'isRead': true,
+                        //   });
+                        //}
                         String mediaUrl = message;
                         if (isMedia) {
                           if (mediaUrl.contains(".mp3")) {
@@ -280,6 +283,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 ),
                               ),
+                              Text(
+                                'Seen',
+                                style: TextStyle(
+                                  color:
+                                      isSeen ? Colors.green : Colors.redAccent,
+                                ),
+                              )
                             ],
                           ),
                         );

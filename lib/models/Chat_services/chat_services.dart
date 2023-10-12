@@ -26,6 +26,7 @@ class ChatServices {
       'message': message,
       'timestamp': FieldValue.serverTimestamp(),
       'isMedia': isMedia,
+      'isRead': false,
     });
   }
 

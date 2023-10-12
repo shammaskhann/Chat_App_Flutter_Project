@@ -32,16 +32,7 @@ class ChatController {
 
   getMessages(String senderUid) {
     final user = auth.currentUser;
-    log('user!.uid: ${user!.uid}');
-    log('senderUid: $senderUid');
-    log('fetching messages');
     String chatDocumentId = '${user!.uid}_${senderUid}';
-    log('chatDocumentId: $chatDocumentId');
-    log(_chatServices
-        .getChatMessagesStream(chatDocumentId)
-        .toString()
-        .isEmpty
-        .toString());
     return _chatServices.getChatMessagesStream(chatDocumentId);
   }
 
