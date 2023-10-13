@@ -290,20 +290,45 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ),
                               ),
                               (isMyMessage)
-                                  ? Text(
-                                      'Seen',
-                                      style: TextStyle(
-                                        color: isSeen
-                                            ? Colors.green
-                                            : Colors.redAccent,
-                                      ),
-                                    )
-                                  : const Text(
-                                      'Delivered',
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                      ),
-                                    )
+                                  ? (isSeen)
+                                      ? Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Text(
+                                              'Seen',
+                                              style: TextStyle(
+                                                  color:
+                                                      AppColors.luminousGreen),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            const Icon(
+                                              Icons.done_all,
+                                              color: AppColors.luminousGreen,
+                                              size: 15,
+                                            ),
+                                          ],
+                                        )
+                                      : const Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const Text(
+                                              'Sent',
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            const Icon(
+                                              Icons.done_all,
+                                              color: Colors.grey,
+                                              size: 15,
+                                            ),
+                                          ],
+                                        )
+                                  : const SizedBox(),
                             ],
                           ),
                         );

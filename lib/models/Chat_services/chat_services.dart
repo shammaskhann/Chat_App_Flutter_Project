@@ -1,4 +1,4 @@
-import 'dart:developer';
+//import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -75,7 +75,7 @@ class ChatServices {
   }
 
   noOfNewMessages(String chatDocumentID) {
-    log('New message check chatDocumentID: $chatDocumentID');
+    //log('New message check chatDocumentID: $chatDocumentID');
     return chatCollection
         .doc(chatDocumentID)
         .collection('messages')

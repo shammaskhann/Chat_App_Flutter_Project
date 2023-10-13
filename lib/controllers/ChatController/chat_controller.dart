@@ -1,4 +1,4 @@
-import 'dart:developer';
+//import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,14 +15,14 @@ class ChatController {
   sendMessage(String senderUid, String message) async {
     final user = auth.currentUser;
     String chatDocumentId = '${user!.uid}_${senderUid}';
-    log('chatDocumentId: $chatDocumentId');
+    //log('chatDocumentId: $chatDocumentId');
     _chatServices.sendMessage(
       chatDocumentId,
       message,
       senderUid,
     );
     String chatDocumentId2 = '${senderUid}_${user.uid}';
-    log('chatDocumentId2: $chatDocumentId2');
+    //log('chatDocumentId2: $chatDocumentId2');
     _chatServices.sendMessage(
       chatDocumentId2,
       message,
@@ -33,7 +33,7 @@ class ChatController {
   getMessages(String senderUid) {
     final user = auth.currentUser;
     String chatDocumentId = '${user!.uid}_${senderUid}';
-    log('Fetching Messages from Stream as chatDocumentId: $chatDocumentId');
+    //log('Fetching Messages from Stream as chatDocumentId: $chatDocumentId');
     return _chatServices.getChatMessagesStream(chatDocumentId);
   }
 
@@ -42,10 +42,10 @@ class ChatController {
     final auth = FirebaseAuth.instance;
     final user = auth.currentUser;
     String chatDocumentId = '${user!.uid}_${senderUid}';
-    log('chatDocumentId: $chatDocumentId');
+    //log('chatDocumentId: $chatDocumentId');
     final chatId = chatDocumentId;
     String chatDocumentId2 = '${senderUid}_${user.uid}';
-    log('chatDocumentId2: $chatDocumentId2');
+    //log('chatDocumentId2: $chatDocumentId2');
     final chatId2 = chatDocumentId2;
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: what);
@@ -78,10 +78,10 @@ class ChatController {
     final auth = FirebaseAuth.instance;
     final user = auth.currentUser;
     String chatDocumentId = '${user!.uid}_${senderUid}';
-    log('chatDocumentId: $chatDocumentId');
+    //log('chatDocumentId: $chatDocumentId');
     final chatId = chatDocumentId;
     String chatDocumentId2 = '${senderUid}_${user.uid}';
-    log('chatDocumentId2: $chatDocumentId2');
+    //log('chatDocumentId2: $chatDocumentId2');
     final chatId2 = chatDocumentId2;
     final picker = ImagePicker();
     final pickedFile = await picker.pickVideo(source: what);
@@ -112,21 +112,21 @@ class ChatController {
   Stream<QuerySnapshot<Map<String, dynamic>>> lastMessege(String recieverUID) {
     final user = auth.currentUser;
     String chatDocumentId = '${user!.uid}_${recieverUID}';
-    log('chatDocumentId: $chatDocumentId');
+    //log('chatDocumentId: $chatDocumentId');
     return _chatServices.lastMessage(chatDocumentId);
   }
 
   markChatAsReadn(String chatdocumentid) {
     final user = auth.currentUser;
     String chatDocumentId = '${chatdocumentid}_${user!.uid}';
-    log('Marking As Seen Msg of chatDocumentId: $chatDocumentId');
+    //log('Marking As Seen Msg of chatDocumentId: $chatDocumentId');
     return _chatServices.markChatAsRead(chatDocumentId);
   }
 
   noOfNewMessage(String chatdocumentid) {
     final user = auth.currentUser;
     String chatDocumentId = '${chatdocumentid}_${user!.uid}';
-    log('Check No Of New Messages chatDocumentId: $chatDocumentId');
+    //log('Check No Of New Messages chatDocumentId: $chatDocumentId');
     return _chatServices.noOfNewMessages(chatDocumentId);
   }
 }
