@@ -8,7 +8,10 @@ import 'package:flutter_firebase_project_app/constant/colors.dart';
 import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/AvatarControllor/avatar_controller.dart';
 import 'package:flutter_firebase_project_app/controllers/ChatController/chat_controller.dart';
+import 'package:flutter_firebase_project_app/view/Chat_view/widgets/ImageChatWidet.dart';
+import 'package:flutter_firebase_project_app/view/Chat_view/widgets/MessageChatWidget.dart';
 import 'package:flutter_firebase_project_app/view/Chat_view/widgets/PopUpMenu.dart';
+import 'package:flutter_firebase_project_app/view/Chat_view/widgets/VoiceNoteChatWidet.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../models/RecieverInfo_services/recieverinfo_services.dart';
@@ -97,7 +100,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     //snapshot.data!.docs[0].reference.update({'isRead': true});
                     final reversedMessages =
                         snapshot.data!.docs.reversed.toList();
-
                     return ListView.builder(
                       reverse: true,
                       itemCount: reversedMessages.length,
@@ -114,224 +116,43 @@ class _ChatScreenState extends State<ChatScreen> {
                                 ? timestamp.toDate()
                                 : DateTime.now();
                         if (!isMyMessage) {
-                          log('currentUser : ${user!.uid}');
-                          log('marking as read of senderUid: $senderUid to recieverUid: ${widget.uid.toString()}');
+                          // log('currentUser : ${user!.uid}');
+                          // log('marking as read of senderUid: $senderUid to recieverUid: ${widget.uid.toString()}');
                           _chatController.markChatAsReadn(widget.uid);
                           // snapshot.data!.docs[index].reference.update({
                           //   'isRead': true,
                           // });
                         }
+                        // log('isMedia: $isMedia');
                         String mediaUrl = message;
                         if (isMedia) {
                           if (mediaUrl.contains(".mp3")) {
-                            final AssetsAudioPlayer _assetsAudioPlayer =
-                                AssetsAudioPlayer();
-                            //AudioPlayer audioPlayer = AudioPlayer();
                             try {
-                              log("Accesing Voice Note Player");
-                              log("mediaUrl: $mediaUrl");
-
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: isMyMessage
-                                      ? CrossAxisAlignment.end
-                                      : CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${dateTime.hour}:${dateTime.minute}',
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                    Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        decoration: BoxDecoration(
-                                          color: isMyMessage
-                                              ? const Color(0xFF272A35)
-                                              : const Color(0xFF373E4E),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        padding: const EdgeInsets.all(8),
-                                        child: Row(children: [
-                                          IconButton(
-                                              onPressed: () {
-                                                _assetsAudioPlayer.open(
-                                                  Audio.network(mediaUrl),
-                                                  autoStart: true,
-                                                  showNotification: true,
-                                                );
-                                              },
-                                              icon: const Icon(
-                                                Icons.play_arrow,
-                                                color: Colors.white,
-                                              )),
-                                          const Spacer(),
-                                          const Text(
-                                            "00:00",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        ])),
-                                  ],
-                                ),
-                              );
+                              // log("Accesing Voice Note Player");
+                              // log("mediaUrl: $mediaUrl");
+                              return VoiceNoteChatWidget(
+                                  dateTime: dateTime,
+                                  isMyMessage: isMyMessage,
+                                  mediaUrl: mediaUrl);
                             } catch (e) {
                               Utils.toastMessage(e.toString());
                             }
+                            ;
                           } else {
-                            log("mediaUrl: $mediaUrl");
-                            log("Accesing Image Viewer");
-
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Scaffold(
-                                      body: Center(
-                                        child: Image.network(message),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: GestureDetector(
-                                onLongPress: () {},
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: isMyMessage
-                                        ? CrossAxisAlignment.end
-                                        : CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${dateTime.hour}:${dateTime.minute}',
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: isMyMessage
-                                              ? const Color(0xFF272A35)
-                                              : const Color(0xFF373E4E),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        padding: const EdgeInsets.all(8),
-                                        child: Image.network(message,
-                                            width: 200,
-                                            height: 200, loadingBuilder:
-                                                (BuildContext context,
-                                                    Widget child,
-                                                    ImageChunkEvent?
-                                                        loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return Container(
-                                            width: 200,
-                                            height: 200,
-                                            child: Shimmer.fromColors(
-                                              baseColor: Colors.grey.shade300,
-                                              highlightColor:
-                                                  Colors.grey.shade100,
-                                              child: Container(
-                                                width: 200,
-                                                height: 200,
-                                                color: Colors.black26,
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
+                            // log("mediaUrl: $mediaUrl");
+                            // log("Accesing Image Viewer");
+                            return ImageChatWidget(
+                                dateTime: dateTime,
+                                isMyMessage: isMyMessage,
+                                message: message,
+                                isSeen: isSeen);
                           }
                         }
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: isMyMessage
-                                ? CrossAxisAlignment.end
-                                : CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${dateTime.hour}:${dateTime.minute}',
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: isMyMessage
-                                      ? const Color(0xFF272A35)
-                                      : const Color(0xFF373E4E),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                padding: const EdgeInsets.all(8),
-                                child: Text(
-                                  message,
-                                  style: TextStyle(
-                                    color: isMyMessage
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                              (isMyMessage)
-                                  ? (isSeen)
-                                      ? Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Text(
-                                              'Seen',
-                                              style: TextStyle(
-                                                  color:
-                                                      AppColors.luminousGreen),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            const Icon(
-                                              Icons.done_all,
-                                              color: AppColors.luminousGreen,
-                                              size: 15,
-                                            ),
-                                          ],
-                                        )
-                                      : const Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Text(
-                                              'Sent',
-                                              style:
-                                                  TextStyle(color: Colors.grey),
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            const Icon(
-                                              Icons.done_all,
-                                              color: Colors.grey,
-                                              size: 15,
-                                            ),
-                                          ],
-                                        )
-                                  : const SizedBox(),
-                            ],
-                          ),
-                        );
+                        return MessageChatWidget(
+                            dateTime: dateTime,
+                            isMyMessage: isMyMessage,
+                            message: message,
+                            isSeen: isSeen);
                       },
                     );
                   } else {
