@@ -122,18 +122,42 @@ class MessengerTile extends StatelessWidget {
                         style: AppTextStyle.MessageTilesubtitle,
                       );
                     }),
-                const CircleAvatar(
-                  radius: 10,
-                  backgroundColor: AppColors.luminousGreen,
-                  child: Text(
-                    "2",
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                StreamBuilder(
+                    stream: _chatController.noOfNewMessage(uid),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      int count;
+                      count = snapshot.data?.docs.length ?? 0;
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Text(
+                          "Loading...",
+                          style: AppTextStyle.MessageTilesubtitle,
+                        );
+                      }
+                      if (count == 0) {
+                        return const Text(
+                          "",
+                          style: AppTextStyle.MessageTilesubtitle,
+                        );
+                      }
+                      if (count > 0) {
+                        return CircleAvatar(
+                          radius: 10,
+                          backgroundColor: AppColors.luminousGreen,
+                          child: Text(
+                            count.toString(),
+                            style: const TextStyle(
+                              color: AppColors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }
+                      return const Text(
+                        "",
+                        style: AppTextStyle.MessageTilesubtitle,
+                      );
+                    }),
               ],
             ),
           ),

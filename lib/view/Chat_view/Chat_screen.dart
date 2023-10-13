@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/Utils/utils.dart';
 import 'package:flutter_firebase_project_app/constant/colors.dart';
@@ -25,6 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
   AvatarController _avatarController = AvatarController();
   TextEditingController _messageController = TextEditingController();
   ChatController _chatController = ChatController();
+  final user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +103,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemCount: reversedMessages.length,
                       itemBuilder: (context, index) {
                         final message = reversedMessages[index]['message'];
+                        final senderUid = reversedMessages[index]['senderUid'];
                         final isMyMessage =
                             reversedMessages[index]['senderUid'] == widget.uid;
                         final timestamp = reversedMessages[index]['timestamp'];
@@ -110,11 +113,14 @@ class _ChatScreenState extends State<ChatScreen> {
                             (timestamp != null && timestamp is Timestamp)
                                 ? timestamp.toDate()
                                 : DateTime.now();
-                        // if (!isMyMessage) {
-                        //   snapshot.data!.docs[index].reference.update({
-                        //     'isRead': true,
-                        //   });
-                        //}
+                        if (!isMyMessage) {
+                          log('currentUser : ${user!.uid}');
+                          log('marking as read of senderUid: $senderUid to recieverUid: ${widget.uid.toString()}');
+                          _chatController.markChatAsReadn(widget.uid);
+                          // snapshot.data!.docs[index].reference.update({
+                          //   'isRead': true,
+                          // });
+                        }
                         String mediaUrl = message;
                         if (isMedia) {
                           if (mediaUrl.contains(".mp3")) {
@@ -283,13 +289,21 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 ),
                               ),
-                              Text(
-                                'Seen',
-                                style: TextStyle(
-                                  color:
-                                      isSeen ? Colors.green : Colors.redAccent,
-                                ),
-                              )
+                              (isMyMessage)
+                                  ? Text(
+                                      'Seen',
+                                      style: TextStyle(
+                                        color: isSeen
+                                            ? Colors.green
+                                            : Colors.redAccent,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Delivered',
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                      ),
+                                    )
                             ],
                           ),
                         );

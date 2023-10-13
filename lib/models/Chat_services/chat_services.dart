@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -58,6 +59,27 @@ class ChatServices {
         .collection('messages')
         .orderBy('timestamp', descending: true)
         .limit(1)
+        .snapshots();
+  }
+
+  Future<void> markChatAsRead(String chatID) async {
+    final messagesCollection =
+        chatCollection.doc(chatID).collection('messages');
+    final unreadMessagesQuery =
+        await messagesCollection.where('isRead', isEqualTo: false).get();
+    final batchUpdate = FirebaseFirestore.instance.batch();
+    for (final doc in unreadMessagesQuery.docs) {
+      batchUpdate.update(doc.reference, {'isRead': true});
+    }
+    await batchUpdate.commit();
+  }
+
+  noOfNewMessages(String chatDocumentID) {
+    log('New message check chatDocumentID: $chatDocumentID');
+    return chatCollection
+        .doc(chatDocumentID)
+        .collection('messages')
+        .where('isRead', isEqualTo: false)
         .snapshots();
   }
 }

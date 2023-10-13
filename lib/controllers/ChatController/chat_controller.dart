@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 class ChatController {
   final auth = FirebaseAuth.instance;
 
-  ChatServices _chatServices = ChatServices();
+  final ChatServices _chatServices = ChatServices();
 
   sendMessage(String senderUid, String message) async {
     final user = auth.currentUser;
@@ -33,11 +33,12 @@ class ChatController {
   getMessages(String senderUid) {
     final user = auth.currentUser;
     String chatDocumentId = '${user!.uid}_${senderUid}';
+    log('Fetching Messages from Stream as chatDocumentId: $chatDocumentId');
     return _chatServices.getChatMessagesStream(chatDocumentId);
   }
 
   uploadMedia(String senderUid, ImageSource what) async {
-    ChatServices _chatServices = ChatServices();
+    final ChatServices _chatServices = ChatServices();
     final auth = FirebaseAuth.instance;
     final user = auth.currentUser;
     String chatDocumentId = '${user!.uid}_${senderUid}';
@@ -49,7 +50,6 @@ class ChatController {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: what);
     if (pickedFile != null) {
-      // Upload the image to Firebase Storage
       final file = File(pickedFile.path);
       final storageReference = FirebaseStorage.instance
           .ref()
@@ -57,20 +57,18 @@ class ChatController {
           .child(chatId)
           .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
       await storageReference.putFile(file);
-      // Get the URL of the uploaded image
       final mediaUrl = await storageReference.getDownloadURL();
-      // Now, you can send the media URL in your chat message along with other details.
       _chatServices.sendMessage(
         chatId,
         mediaUrl,
         senderUid,
-        isMedia: true, // Add a flag to indicate that this is media
+        isMedia: true,
       );
       _chatServices.sendMessage(
         chatId2,
         mediaUrl,
         senderUid,
-        isMedia: true, // Add a flag to indicate that this is media
+        isMedia: true,
       );
     }
   }
@@ -88,7 +86,6 @@ class ChatController {
     final picker = ImagePicker();
     final pickedFile = await picker.pickVideo(source: what);
     if (pickedFile != null) {
-      // Upload the image to Firebase Storage
       final file = File(pickedFile.path);
       final storageReference = FirebaseStorage.instance
           .ref()
@@ -96,20 +93,18 @@ class ChatController {
           .child(chatId)
           .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
       await storageReference.putFile(file);
-      // Get the URL of the uploaded image
       final mediaUrl = await storageReference.getDownloadURL();
-      // Now, you can send the media URL in your chat message along with other details.
       _chatServices.sendMessage(
         chatId,
         mediaUrl,
         senderUid,
-        isMedia: true, // Add a flag to indicate that this is media
+        isMedia: true,
       );
       _chatServices.sendMessage(
         chatId2,
         mediaUrl,
         senderUid,
-        isMedia: true, // Add a flag to indicate that this is media
+        isMedia: true,
       );
     }
   }
@@ -119,5 +114,19 @@ class ChatController {
     String chatDocumentId = '${user!.uid}_${recieverUID}';
     log('chatDocumentId: $chatDocumentId');
     return _chatServices.lastMessage(chatDocumentId);
+  }
+
+  markChatAsReadn(String chatdocumentid) {
+    final user = auth.currentUser;
+    String chatDocumentId = '${chatdocumentid}_${user!.uid}';
+    log('Marking As Seen Msg of chatDocumentId: $chatDocumentId');
+    return _chatServices.markChatAsRead(chatDocumentId);
+  }
+
+  noOfNewMessage(String chatdocumentid) {
+    final user = auth.currentUser;
+    String chatDocumentId = '${chatdocumentid}_${user!.uid}';
+    log('Check No Of New Messages chatDocumentId: $chatDocumentId');
+    return _chatServices.noOfNewMessages(chatDocumentId);
   }
 }
