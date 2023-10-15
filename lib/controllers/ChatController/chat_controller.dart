@@ -129,4 +129,5 @@ class ChatController {
     //log('Check No Of New Messages chatDocumentId: $chatDocumentId');
     return _chatServices.noOfNewMessages(chatDocumentId);
   }
+  //deleteMessage(String )
 }

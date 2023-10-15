@@ -6,6 +6,8 @@ import 'package:flutter_firebase_project_app/constant/colors.dart';
 import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/SignupController/signup_controller.dart';
 import 'package:flutter_firebase_project_app/view/Widgets/CustomWideButton.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../Utils/utils.dart';
@@ -73,27 +75,42 @@ class _SignupScreenState extends State<SignupScreen> {
                               : null,
                         ),
                         Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: InkWell(
-                            onTap: () {
-                              // signUpController.pickImage();
-                              _pickImage(ImageSource.camera);
-                              // AvatarController().uploadImageToFirebaseStorage(
-                              //     _avatarImage!, _auth.currentUser!.uid);
-                              //_saveAvatar();
-                            },
-                            child: const CircleAvatar(
-                              radius: 15,
-                              backgroundColor: AppColors.luminousGreen,
-                              child: Icon(
-                                Icons.add,
-                                size: 20,
-                                color: AppColors.primaryColor,
+                            bottom: 0,
+                            right: 0,
+                            child: FocusedMenuHolder(
+                              menuWidth:
+                                  MediaQuery.of(context).size.width * 0.50,
+                              blurSize: 2.0,
+                              menuOffset: 10.0,
+                              animateMenuItems: true,
+                              openWithTap: true,
+                              child: const CircleAvatar(
+                                radius: 15,
+                                backgroundColor: AppColors.luminousGreen,
+                                child: Icon(
+                                  Icons.add,
+                                  size: 20,
+                                  color: AppColors.primaryColor,
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
+                              onPressed: () {},
+                              menuItems: [
+                                FocusedMenuItem(
+                                  title: const Text("Camera"),
+                                  trailingIcon: const Icon(Icons.camera),
+                                  onPressed: () {
+                                    _pickImage(ImageSource.camera);
+                                  },
+                                ),
+                                FocusedMenuItem(
+                                  title: const Text("Gallery"),
+                                  trailingIcon: const Icon(Icons.image),
+                                  onPressed: () {
+                                    _pickImage(ImageSource.gallery);
+                                  },
+                                ),
+                              ],
+                            )),
                       ],
                     ),
                   ),

@@ -5,6 +5,7 @@ import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/ChatController/chat_controller.dart';
 import 'package:flutter_firebase_project_app/models/Chat_services/chat_services.dart';
 import 'package:flutter_firebase_project_app/view/Home_View/Drawer/drawer.dart';
+import 'package:flutter_firebase_project_app/view/Home_View/widgets/GroupCreateSheet.dart';
 import 'package:flutter_firebase_project_app/view/Widgets/MessengerTile.dart';
 
 import '../../Utils/utils.dart';
@@ -118,6 +119,26 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       backgroundColor: AppColors.primaryColor,
+      floatingActionButton: FloatingActionButton(
+        enableFeedback: true,
+        backgroundColor: AppColors.luminousGreen,
+        onPressed: () {
+          showModalBottomSheet(
+              transitionAnimationController: AnimationController(
+                vsync: Navigator.of(context),
+                duration: const Duration(milliseconds: 1000),
+              ),
+              showDragHandle: true,
+              isScrollControlled: true,
+              context: context,
+              builder: (context) {
+                return const GroupCreateSheet();
+              });
+        },
+        child: const Icon(Icons.group_add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
     );
   }
 }

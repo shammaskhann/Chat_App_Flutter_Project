@@ -106,6 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemBuilder: (context, index) {
                         final message = reversedMessages[index]['message'];
                         final senderUid = reversedMessages[index]['senderUid'];
+                        final messageID = reversedMessages[index].id;
                         final isMyMessage =
                             reversedMessages[index]['senderUid'] == widget.uid;
                         final timestamp = reversedMessages[index]['timestamp'];
@@ -149,6 +150,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           }
                         }
                         return MessageChatWidget(
+                            messageID: messageID,
                             dateTime: dateTime,
                             isMyMessage: isMyMessage,
                             message: message,
@@ -232,5 +234,6 @@ class _ChatScreenState extends State<ChatScreen> {
       )),
       backgroundColor: AppColors.primaryColor,
     );
+   
   }
 }

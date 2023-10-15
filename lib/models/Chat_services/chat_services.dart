@@ -23,6 +23,7 @@ class ChatServices {
   void sendMessage(String chatId, String message, String senderUid,
       {bool isMedia = false}) {
     chatCollection.doc(chatId).collection('messages').add({
+      'messageId': chatCollection.doc(chatId).collection('messages').doc().id,
       'senderUid': senderUid,
       'message': message,
       'timestamp': FieldValue.serverTimestamp(),
@@ -81,5 +82,9 @@ class ChatServices {
         .collection('messages')
         .where('isRead', isEqualTo: false)
         .snapshots();
+  }
+
+  deleteForMeMessage(String chatId, String messageId) {
+    chatCollection.doc(chatId).collection('messages').doc(messageId).delete();
   }
 }
