@@ -5,11 +5,12 @@ import 'package:flutter_firebase_project_app/view/Widgets/CustomWideButton.dart'
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:flutter_multiselect/flutter_multiselect.dart';
 import '../../../Utils/utils.dart';
 import '../../../constant/colors.dart';
 import '../../../constant/textstyle.dart';
 import '../../../controllers/AvatarControllor/avatar_controller.dart';
+import '../../../controllers/SearchController/searchController.dart';
 
 class GroupCreateSheet extends StatefulWidget {
   const GroupCreateSheet({super.key});
@@ -22,6 +23,8 @@ class _GroupCreateSheetState extends State<GroupCreateSheet> {
   final key = GlobalKey<FormState>();
   final _controller = AvatarController();
   File? groupAvatarImage;
+  final _searchController = Searchcontroller();
+  List<String> selectedUsers = [];
   Future<void> _pickImage(ImageSource source) async {
     final File? image = (source == ImageSource.gallery)
         ? await _controller.pickImageFromGallery()
@@ -39,7 +42,8 @@ class _GroupCreateSheetState extends State<GroupCreateSheet> {
     return Container(
         height: MediaQuery.of(context).size.height * 0.85,
         decoration: const BoxDecoration(
-          color: Color(0xFF272A35),
+          color: AppColors.primaryColor,
+          //Color(0xFF272A35),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
@@ -49,17 +53,6 @@ class _GroupCreateSheetState extends State<GroupCreateSheet> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                height: 9,
-                width: 150,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
             Form(
                 key: key,
                 child: Padding(
@@ -120,17 +113,6 @@ class _GroupCreateSheetState extends State<GroupCreateSheet> {
                                       },
                                     ),
                                   ],
-                                  //   InkWell(
-                                  //   onTap: () {
-
-                                  //     // signUpController.pickImage();
-                                  //     //_pickImage(ImageSource.camera);
-                                  //     // AvatarController().uploadImageToFirebaseStorage(
-                                  //     //     _avatarImage!, _auth.currentUser!.uid);
-                                  //     //_saveAvatar();
-                                  //   },
-                                  //   child:
-                                  // ),
                                 )),
                           ],
                         ),
@@ -179,44 +161,60 @@ class _GroupCreateSheetState extends State<GroupCreateSheet> {
                           },
                         ),
                       ),
-                      // Text(
-                      //   'Add Users',
-                      //   style: AppTextStyle.subtitle,
-                      //   textAlign: TextAlign.start,
-                      // ),
-                      // Add Users to create group using search bar
-                      // SearchBar(
-                      //   backgroundColor: MaterialStateColor.resolveWith(
-                      //       (states) => Colors.grey),
-                      //   hintText: "Search..",
-                      //   hintStyle: MaterialStateTextStyle.resolveWith(
-                      //     (states) => const TextStyle(
-                      //       fontFamily: 'Mont',
-                      //       color: AppColors.white,
-                      //     ),
-                      //   ),
-                      //   constraints: const BoxConstraints(
-                      //     maxWidth: 300,
-                      //     maxHeight: 50,
-                      //   ),
-                      //   onChanged: (value) {},
-                      //   onTap: () {},
-                      //   shadowColor: MaterialStateProperty.all(Colors.black),
-                      //   shape: MaterialStateProperty.all(
-                      //     RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(10),
-                      //     ),
-                      //   ),
-                      //   trailing: <Widget>[
-                      //     IconButton(
-                      //       onPressed: () {},
-                      //       icon: const Icon(
-                      //         Icons.search,
-                      //         color: AppColors.white,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      //A Field for selecting users for group chat like a search which give user tile with a add button at suffix and a list of selected users
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: MultiSelect(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            titleText: 'Select Users',
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Please select one or more option(s)';
+                              }
+                              return null;
+                            },
+                            errorText: 'Please select one or more option(s)',
+                            dataSource: _searchController.getUsersList(),
+                            textField: 'display',
+                            valueField: 'value',
+                            filterable: true,
+                            required: true,
+                            value: null,
+                            onSaved: (value) {
+                              print('The value is $value');
+                            },
+                            change: (value) {
+                              print('The value is $value');
+                            },
+                            selectIcon: Icons.arrow_drop_down_circle,
+                            saveButtonColor: AppColors.primaryColor,
+                            checkBoxColor: AppColors.primaryColor,
+                            cancelButtonColor: AppColors.primaryColor,
+                            // dataSource: [
+                            //   {
+                            //     "display": "User 1",
+                            //     "value": "User 1",
+                            //   },
+                            //   {
+                            //     "display": "User 2",
+                            //     "value": "User 2",
+                            //   },
+                            //   {
+                            //     "display": "User 3",
+                            //     "value": "User 3",
+                            //   }
+                            // ],
+                          )),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      //Create Group Button
+
                       CustomButton(
                           title: 'Create Group',
                           loading: false,

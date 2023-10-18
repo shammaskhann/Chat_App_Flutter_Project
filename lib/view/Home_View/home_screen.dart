@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/colors.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_firebase_project_app/view/Widgets/MessengerTile.dart';
 
 import '../../Utils/utils.dart';
 import '../../constant/routes.dart';
+import '../../controllers/SearchController/searchController.dart';
 import '../Widgets/ChatroomTile.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,8 +23,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List usersList = [];
   final user = FirebaseAuth.instance.currentUser;
   ChatServices _chatServices = ChatServices();
+  Searchcontroller _searchController = Searchcontroller();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SearchBar(
+                  controller: TextEditingController(),
                   backgroundColor: MaterialStateColor.resolveWith(
                       (states) => const Color(0xFF596787)),
                   hintText: "Search..",
@@ -50,7 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     maxWidth: MediaQuery.of(context).size.width * 0.8,
                     maxHeight: 50,
                   ),
-                  onChanged: (value) {},
+                  onChanged: (value) async {
+                    usersList = await _searchController.getUsersList();
+                    log(usersList.toString());
+                  },
                   onTap: () {},
                   shadowColor: MaterialStateProperty.all(Colors.black),
                   shape: MaterialStateProperty.all(
@@ -129,6 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 duration: const Duration(milliseconds: 1000),
               ),
               showDragHandle: true,
+              backgroundColor: AppColors.primaryColor,
               isScrollControlled: true,
               context: context,
               builder: (context) {
