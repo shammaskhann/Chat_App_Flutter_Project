@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../constant/routes.dart';
-import '../../models/FirebaseAuth_services/Auth_services.dart';
+import '../../services/FirebaseAuth_services/Auth_services.dart';
 
 class LoginController {
   final emailController = TextEditingController();

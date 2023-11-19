@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_project_app/models/SplashScreen_services/splash_controller.dart';
+import 'package:flutter_firebase_project_app/services/SplashScreen_services/splash_controller.dart';
 
 import '../../constant/routes.dart';
 

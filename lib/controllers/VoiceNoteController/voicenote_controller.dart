@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_firebase_project_app/Utils/utils.dart';
-import 'package:flutter_firebase_project_app/models/Chat_services/chat_services.dart';
+import 'package:flutter_firebase_project_app/services/Chat_services/chat_services.dart';
 import 'package:record/record.dart'; // Import the record package
 import 'package:permission_handler/permission_handler.dart';
 

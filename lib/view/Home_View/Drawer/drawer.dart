@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_project_app/models/UserInfo_services/userinfo_services.dart';
+import 'package:flutter_firebase_project_app/services/UserInfo_services/userinfo_services.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../Utils/utils.dart';

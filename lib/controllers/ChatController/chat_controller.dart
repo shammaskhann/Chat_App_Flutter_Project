@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_firebase_project_app/models/Chat_services/chat_services.dart';
+import 'package:flutter_firebase_project_app/services/Chat_services/chat_services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ChatController {
@@ -129,5 +129,58 @@ class ChatController {
     //log('Check No Of New Messages chatDocumentId: $chatDocumentId');
     return _chatServices.noOfNewMessages(chatDocumentId);
   }
-  //deleteMessage(String )
+
+  sendGroupMessages(String groupName, String senderUid, String message) async {
+    await _chatServices.sendGroupMessage(groupName, senderUid, message, false);
+  }
+
+  uploadGroupMedia(
+      String senderUid, ImageSource image, String groupName) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: image);
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      final storageReference = FirebaseStorage.instance
+          .ref()
+          .child('groups')
+          .child(groupName)
+          .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+      await storageReference.putFile(file);
+      final mediaUrl = await storageReference.getDownloadURL();
+      _chatServices.sendGroupMessage(
+        senderUid,
+        mediaUrl,
+        groupName,
+        true,
+      );
+    }
+    //deleteMessage(String )
+  }
+
+  uploadGroupMediaVideo(
+      String senderUid, ImageSource video, String groupName) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickVideo(source: video);
+    if (pickedFile != null) {
+      final file = File(pickedFile.path);
+      final storageReference = FirebaseStorage.instance
+          .ref()
+          .child('groups')
+          .child(groupName)
+          .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+      await storageReference.putFile(file);
+      final mediaUrl = await storageReference.getDownloadURL();
+      _chatServices.sendGroupMessage(
+        senderUid,
+        mediaUrl,
+        groupName,
+        true,
+      );
+    }
+    //deleteMessage(String
+  }
+
+  Stream getStreamGroupMessage(String groupName) {
+    return _chatServices.getGroupMessageStream(groupName);
+  }
 }

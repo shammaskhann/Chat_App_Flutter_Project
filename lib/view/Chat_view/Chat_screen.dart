@@ -14,7 +14,7 @@ import 'package:flutter_firebase_project_app/view/Chat_view/widgets/PopUpMenu.da
 import 'package:flutter_firebase_project_app/view/Chat_view/widgets/VoiceNoteChatWidet.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../models/RecieverInfo_services/recieverinfo_services.dart';
+import '../../services/RecieverInfo_services/recieverinfo_services.dart';
 
 class ChatScreen extends StatefulWidget {
   final String uid;

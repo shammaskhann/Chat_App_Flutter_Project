@@ -1,12 +1,17 @@
 //import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatServices {
   final auth = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
   CollectionReference chatCollection =
       FirebaseFirestore.instance.collection('chats');
+  CollectionReference groupCollection =
+      FirebaseFirestore.instance.collection('groups');
+  DocumentReference groupDoc =
+      FirebaseFirestore.instance.collection('groups').doc();
 
   Future getAllUser() {
     return _db.collection('users').get();
@@ -86,5 +91,32 @@ class ChatServices {
 
   deleteForMeMessage(String chatId, String messageId) {
     chatCollection.doc(chatId).collection('messages').doc(messageId).delete();
+  }
+
+  sendGroupMessage(
+      String groupName, senderUid, String message, bool isMedia) async {
+    await groupCollection.doc(groupName).collection('messages').doc().set({
+      'senderUid': senderUid,
+      'message': message,
+      'timestamp': FieldValue.serverTimestamp(),
+      'isRead': false,
+      'isMedia': isMedia,
+    });
+  }
+
+  Stream getGroupMessageStream(String groupName) {
+    return groupCollection
+        .doc(groupName)
+        .collection('messages')
+        .orderBy('timestamp')
+        .snapshots();
+  }
+
+  Future<void> deleteGroupMessage(String groupName, String messageId) async {
+    await groupCollection
+        .doc(groupName)
+        .collection('messages')
+        .doc(messageId)
+        .delete();
   }
 }

@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/routes.dart';
 import 'package:flutter_firebase_project_app/controllers/AvatarControllor/avatar_controller.dart';
-import 'package:flutter_firebase_project_app/models/FirebaseAuth_services/Auth_services.dart';
+import 'package:flutter_firebase_project_app/services/FirebaseAuth_services/Auth_services.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../Utils/utils.dart';

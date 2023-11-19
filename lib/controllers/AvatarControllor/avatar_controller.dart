@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_firebase_project_app/Utils/utils.dart';
-import 'package:flutter_firebase_project_app/models/FireStorage_services/ImageStorage_services.dart';
+import 'package:flutter_firebase_project_app/services/FireStorage_services/ImageStorage_services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AvatarController {
