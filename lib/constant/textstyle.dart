@@ -37,7 +37,7 @@ class AppTextStyle {
     color: AppColors.white,
     fontFamily: 'Mont',
     fontSize: 20,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
   );
   static const TextStyle MessageTilesubtitle = TextStyle(
     color: AppColors.white,

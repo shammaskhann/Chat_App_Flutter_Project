@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../constant/colors.dart';
@@ -28,6 +30,10 @@ class _ImageChatWidgetState extends State<ImageChatWidget> {
           context,
           MaterialPageRoute(
             builder: (context) => Scaffold(
+              appBar: AppBar(
+                backgroundColor: AppColors.primaryColor,
+              ),
+              backgroundColor: AppColors.primaryColor,
               body: Center(
                 child: Image.network(widget.message),
               ),

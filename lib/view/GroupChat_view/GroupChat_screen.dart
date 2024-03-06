@@ -52,15 +52,15 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                       style: AppTextStyle.heading.copyWith(
                           fontSize: MediaQuery.of(context).size.width * 0.07)),
                   Expanded(child: Container()),
-                  IconButton(
-                    icon: Icon(Icons.video_call),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => VideoCallScreen()));
-                    },
-                  ),
+                  // IconButton(
+                  //   icon: Icon(Icons.video_call),
+                  //   onPressed: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => VideoCallScreen()));
+                  //   },
+                  // ),
                 ],
               ),
               SizedBox(

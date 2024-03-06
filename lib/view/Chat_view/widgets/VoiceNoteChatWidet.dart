@@ -16,9 +16,17 @@ class VoiceNoteChatWidget extends StatefulWidget {
 }
 
 class _VoiceNoteChatWidgetState extends State<VoiceNoteChatWidget> {
+  final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer();
+  bool isPlaying = false;
+  int audioDuration = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AssetsAudioPlayer _assetsAudioPlayer = AssetsAudioPlayer();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -43,23 +51,46 @@ class _VoiceNoteChatWidgetState extends State<VoiceNoteChatWidget> {
               ),
               padding: const EdgeInsets.all(8),
               child: Row(children: [
-                IconButton(
-                    onPressed: () {
-                      _assetsAudioPlayer.open(
-                        Audio.network(widget.mediaUrl),
-                        autoStart: true,
-                        showNotification: true,
-                      );
-                    },
-                    icon: const Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                    )),
-                const Spacer(),
-                const Text(
-                  "00:00",
-                  style: TextStyle(color: Colors.white),
-                ),
+                (isPlaying)
+                    ? IconButton(
+                        onPressed: () {
+                          _assetsAudioPlayer.pause();
+                          setState(() {
+                            isPlaying = false;
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.pause,
+                          color: Colors.white,
+                        ))
+                    : IconButton(
+                        onPressed: () {
+                          _assetsAudioPlayer
+                              .open(
+                            Audio.network(widget.mediaUrl),
+                            autoStart: true,
+                            showNotification: true,
+                          )
+                              .then((value) {
+                            setState(() {
+                              audioDuration = _assetsAudioPlayer
+                                  .current.value!.audio.duration.inSeconds;
+                              isPlaying = true;
+                            });
+                          });
+                          _assetsAudioPlayer.realtimePlayingInfos
+                              .listen((event) {
+                            if (event.currentPosition == event.duration) {
+                              setState(() {
+                                isPlaying = false;
+                              });
+                            }
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.play_arrow,
+                          color: Colors.white,
+                        ))
               ])),
         ],
       ),

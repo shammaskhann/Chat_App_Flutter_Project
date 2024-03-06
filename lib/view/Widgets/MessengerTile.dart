@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/textstyle.dart';
 import 'package:flutter_firebase_project_app/controllers/AvatarControllor/avatar_controller.dart';
 import 'package:flutter_firebase_project_app/controllers/ChatController/chat_controller.dart';
+import 'package:intl/intl.dart';
 
 import '../../constant/colors.dart';
 import '../../constant/routes.dart';
@@ -18,7 +19,7 @@ class MessengerTile extends StatelessWidget {
     ChatController _chatController = ChatController();
     var timestamp;
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5),
         child: InkWell(
           onTap: () {
             Navigator.pushNamed(context, AppRoutes.chatScreen, arguments: uid);
@@ -28,9 +29,21 @@ class MessengerTile extends StatelessWidget {
               future: _avatarController.getAvatar(uid),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  return CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(snapshot.data.toString()),
+                  return Container(
+                    decoration:
+                        BoxDecoration(shape: BoxShape.circle, boxShadow: [
+                      BoxShadow(
+                        color: AppColors.black.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset:
+                            const Offset(3, 3), // changes position of shadow
+                      ),
+                    ]),
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundImage: NetworkImage(snapshot.data.toString()),
+                    ),
                   );
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -109,8 +122,19 @@ class MessengerTile extends StatelessWidget {
                             (timestamp != null && timestamp is Timestamp)
                                 ? timestamp.toDate()
                                 : DateTime.now();
+                        final difference = DateTime.now().difference(dateTime);
+                        String displayTime;
+                        if (difference.inDays == 1) {
+                          displayTime = 'Yesterday';
+                        } else if (difference.inDays < 7) {
+                          displayTime = DateFormat('EEEE')
+                              .format(dateTime); // Weekday name
+                        } else {
+                          displayTime = DateFormat('dd MMM')
+                              .format(dateTime); // Date and month
+                        }
                         return Text(
-                          '${dateTime.hour}:${dateTime.minute}',
+                          displayTime,
                           style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 12,

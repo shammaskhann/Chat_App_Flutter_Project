@@ -1,6 +1,7 @@
 import 'dart:developer';
-import 'package:assets_audio_player/assets_audio_player.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/Utils/utils.dart';
@@ -12,7 +13,8 @@ import 'package:flutter_firebase_project_app/view/Chat_view/widgets/ImageChatWid
 import 'package:flutter_firebase_project_app/view/Chat_view/widgets/MessageChatWidget.dart';
 import 'package:flutter_firebase_project_app/view/Chat_view/widgets/PopUpMenu.dart';
 import 'package:flutter_firebase_project_app/view/Chat_view/widgets/VoiceNoteChatWidet.dart';
-import 'package:shimmer/shimmer.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../services/RecieverInfo_services/recieverinfo_services.dart';
 
@@ -129,8 +131,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         if (isMedia) {
                           if (mediaUrl.contains(".mp3")) {
                             try {
-                              // log("Accesing Voice Note Player");
-                              // log("mediaUrl: $mediaUrl");
                               return VoiceNoteChatWidget(
                                   dateTime: dateTime,
                                   isMyMessage: isMyMessage,
@@ -142,11 +142,52 @@ class _ChatScreenState extends State<ChatScreen> {
                           } else {
                             // log("mediaUrl: $mediaUrl");
                             // log("Accesing Image Viewer");
-                            return ImageChatWidget(
-                                dateTime: dateTime,
-                                isMyMessage: isMyMessage,
-                                message: message,
-                                isSeen: isSeen);
+                            return Row(
+                              mainAxisAlignment: isMyMessage
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.start,
+                              children: [
+                                ImageChatWidget(
+                                    dateTime: dateTime,
+                                    isMyMessage: isMyMessage,
+                                    message: message,
+                                    isSeen: isSeen),
+                                (isMyMessage)
+                                    ? const SizedBox()
+                                    : IconButton(
+                                        onPressed: () async {
+                                          var dio = Dio();
+                                          try {
+                                            var tempDir =
+                                                await getTemporaryDirectory();
+                                            var tempFilePath =
+                                                '${tempDir.path}/tempImage.jpg';
+                                            await dio
+                                                .download(message, tempFilePath,
+                                                    onReceiveProgress:
+                                                        (rec, total) {
+                                              print(
+                                                  'Rec: $rec , Total: $total');
+                                            });
+                                            print('Download completed');
+
+                                            // Save the image to the gallery
+                                            GallerySaver.saveImage(tempFilePath,
+                                                    albumName: 'Download')
+                                                .then((bool? success) {
+                                              print(
+                                                  'Image saved to gallery: $success');
+                                            });
+                                            Utils.toastMessage(
+                                                'Image saved to gallery');
+                                          } catch (e) {
+                                            print('Download error: $e');
+                                          }
+                                        },
+                                        icon: const Icon(Icons.download),
+                                      ),
+                              ],
+                            );
                           }
                         }
                         return MessageChatWidget(
@@ -234,6 +275,5 @@ class _ChatScreenState extends State<ChatScreen> {
       )),
       backgroundColor: AppColors.primaryColor,
     );
-   
   }
 }

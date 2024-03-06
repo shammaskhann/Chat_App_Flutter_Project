@@ -9,7 +9,7 @@ class LoginController {
   final emailFocusNode = FocusNode();
   final passwordFocusNode = FocusNode();
   bool loading = false;
-  bool isRememberMe = false;
+  bool isRememberMe = true;
 
   void dispose() {
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -27,7 +27,7 @@ class LoginController {
     isLogin = await authServices.authLogin(
         emailController.text.trim(), passwordController.text.trim());
     if (isLogin) {
-      Navigator.pushNamed(context, AppRoutes.homeScreen);
+      Navigator.pushReplacementNamed(context, AppRoutes.homeScreen);
       loading = false;
     } else {
       loading = false;

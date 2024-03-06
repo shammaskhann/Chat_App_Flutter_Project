@@ -55,6 +55,17 @@ class _GroupCreateModalSheetState extends State<GroupCreateModalSheet> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Container(
+                height: 5,
+                width: MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(
+                  color: AppColors.silverGray,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
             Form(
                 key: key,
                 child: Padding(
@@ -120,6 +131,9 @@ class _GroupCreateModalSheetState extends State<GroupCreateModalSheet> {
                                 )),
                           ],
                         ),
+                      ),
+                      const SizedBox(
+                        height: 10,
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),

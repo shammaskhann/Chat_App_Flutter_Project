@@ -173,14 +173,14 @@ class _GroupCreateScreenState extends State<GroupCreateScreen> {
               child: CustomButton(
                   title: "CREATE GROUP",
                   loading: false,
-                  onPressed: () {
-                    _groupController.createGroup(
+                  onPressed: () async {
+                    await _groupController.createGroup(
                         selectedUsers,
                         widget.groupName,
                         widget.groupDescription,
                         widget.groupAvatarImage);
                     Utils.toastMessage('Group Created');
-                    Navigator.push(context,
+                    Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) {
                       return const HomeScreen();
                     }));

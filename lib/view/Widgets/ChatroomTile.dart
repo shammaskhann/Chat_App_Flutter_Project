@@ -23,21 +23,29 @@ class ChatroomTile extends StatelessWidget {
           child: Container(
             // height: 140,
             width: 105,
-            padding: const EdgeInsets.only(left: 8.0),
+            padding: const EdgeInsets.only(left: 10.0),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.black.withOpacity(0.3),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(3, 3), // changes position of shadow
+                  ),
+                ],
                 image: DecorationImage(
                     image: NetworkImage(group['groupImage']),
                     fit: BoxFit.cover)),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
-                    ),
+                Flexible(
                     child: Text(group['name'],
                         style: AppTextStyle.MessageTileName)),
+                const SizedBox(
+                  height: 5,
+                ),
               ],
             ),
           ),

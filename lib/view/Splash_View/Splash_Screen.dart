@@ -23,30 +23,27 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Stack(
-        children: [
-          Center(
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Image(
-                image: AssetImage(AppImages.splashLogo),
-                height: 50,
-                width: 50,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                'Chat App',
-                style: TextStyle(
-                  fontFamily: 'Aquire',
-                  color: AppColors.luminousGreen,
-                  fontSize: 50,
-                ),
-                textAlign: TextAlign.center,
-              )
-            ]),
+      body: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Image(
+            image: AssetImage(AppImages.splashLogo),
+            height: 50,
+            width: 50,
           ),
-        ],
+          SizedBox(
+            width: 10,
+          ),
+          Text(
+            'Convo\nConnect',
+            style: TextStyle(
+              fontFamily: 'Aquire',
+              fontWeight: FontWeight.w300,
+              color: AppColors.luminousGreen,
+              fontSize: 40,
+            ),
+            textAlign: TextAlign.center,
+          )
+        ]),
       ),
       backgroundColor: AppColors.primaryColor,
     );
