@@ -36,22 +36,33 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image(
                           image: AssetImage(AppImages.splashLogo),
-                          height: 30,
-                          width: 30,
+                          height: 50,
+                          width: 50,
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        Text('CHAT APP',
-                            style: TextStyle(
-                                color: AppColors.luminousGreen,
-                                fontSize: 36,
-                                fontFamily: 'Aquire')),
+                        Text(
+                          'Convo\nConnect',
+                          style: TextStyle(
+                            fontFamily: 'Aquire',
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.luminousGreen,
+                            fontSize: 36,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                        // Text('CHAT APP',
+                        //     style: TextStyle(
+                        //         color: AppColors.luminousGreen,
+                        //         fontSize: 36,
+                        //         fontFamily: 'Aquire')),
                       ],
                     ),
                   ],
@@ -203,25 +214,26 @@ class _LoginScreenState extends State<LoginScreen> {
                                       )),
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      padding: const EdgeInsets.only(right: 5),
-                                      child: Switch(
-                                          inactiveTrackColor:
-                                              AppColors.silverGray,
-                                          activeColor: AppColors.luminousGreen,
-                                          value: loginController.isRememberMe,
-                                          onChanged: (value) {
-                                            loginController.isRememberMe =
-                                                value;
-                                            setState(() {});
-                                          }),
-                                    ),
-                                    const Text(
-                                      'Remember me',
-                                      style: AppTextStyle.subtitle,
-                                    ),
+                                    // Container(
+                                    //   padding: const EdgeInsets.only(right: 5),
+                                    //   child: Switch(
+                                    //       inactiveTrackColor:
+                                    //           AppColors.silverGray,
+                                    //       activeColor: AppColors.luminousGreen,
+                                    //       value: loginController.isRememberMe,
+                                    //       onChanged: (value) {
+                                    //         loginController.isRememberMe =
+                                    //             value;
+                                    //         setState(() {});
+                                    //       }),
+                                    // ),
+                                    // const Text(
+                                    //   'Remember me',
+                                    //   style: AppTextStyle.subtitle,
+                                    // ),
                                     const Spacer(),
                                     TextButton(
                                         onPressed: () {},

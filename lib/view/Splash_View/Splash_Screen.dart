@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
             'Convo\nConnect',
             style: TextStyle(
               fontFamily: 'Aquire',
-              fontWeight: FontWeight.w300,
+              fontWeight: FontWeight.w600,
               color: AppColors.luminousGreen,
               fontSize: 40,
             ),
