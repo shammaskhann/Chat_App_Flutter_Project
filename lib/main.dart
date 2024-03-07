@@ -32,45 +32,88 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.splashScreen,
       onGenerateRoute: (settings) {
-        if (settings.name == AppRoutes.splashScreen) {
-          return PageRouteBuilder(
-            transitionsBuilder:
-                (context, animation, secondaryAnimation, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
-            },
-            pageBuilder: (context, animation, secondaryAnimation) =>
-                const SplashScreen(),
-          );
+        Widget? screen;
+        Object? args = settings.arguments;
+
+        switch (settings.name) {
+          case AppRoutes.splashScreen:
+            screen = const SplashScreen();
+            break;
+          case AppRoutes.loginScreen:
+            screen = const LoginScreen();
+            break;
+          case AppRoutes.signupScreen:
+            screen = const SignupScreen();
+            break;
+          case AppRoutes.homeScreen:
+            screen = const HomeScreen();
+            break;
+          case AppRoutes.chatScreen:
+            screen = ChatScreen(uid: args as String);
+            break;
         }
-        if (settings.name == AppRoutes.loginScreen) {
-          return PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  const LoginScreen());
-        }
-        if (settings.name == AppRoutes.signupScreen) {
-          return MaterialPageRoute(
-            builder: (context) => const SignupScreen(),
-          );
-        }
-        if (settings.name == AppRoutes.homeScreen) {
-          return MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          );
-        }
-        if (settings.name == AppRoutes.chatScreen) {
-          final args = settings.arguments;
-          return MaterialPageRoute(
-            builder: (context) => ChatScreen(
-              uid: args as String,
-            ),
-          );
-        }
-        return null;
+
+        return screen != null
+            ? PageRouteBuilder(
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  var begin = 0.0;
+                  var end = 1.0;
+                  var curve = Curves.ease;
+
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
+
+                  return FadeTransition(
+                    opacity: animation.drive(tween),
+                    child: child,
+                  );
+                },
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    screen!,
+              )
+            : null;
       },
-      title: 'Flutter Demo',
+      // onGenerateRoute: (settings) {
+      //   if (settings.name == AppRoutes.splashScreen) {
+      //     return PageRouteBuilder(
+      //       transitionsBuilder:
+      //           (context, animation, secondaryAnimation, child) {
+      //         return FadeTransition(
+      //           opacity: animation,
+      //           child: child,
+      //         );
+      //       },
+      //       pageBuilder: (context, animation, secondaryAnimation) =>
+      //           const SplashScreen(),
+      //     );
+      //   }
+      //   if (settings.name == AppRoutes.loginScreen) {
+      //     return PageRouteBuilder(
+      //         pageBuilder: (context, animation, secondaryAnimation) =>
+      //             const LoginScreen());
+      //   }
+      //   if (settings.name == AppRoutes.signupScreen) {
+      //     return MaterialPageRoute(
+      //       builder: (context) => const SignupScreen(),
+      //     );
+      //   }
+      //   if (settings.name == AppRoutes.homeScreen) {
+      //     return MaterialPageRoute(
+      //       builder: (context) => const HomeScreen(),
+      //     );
+      //   }
+      //   if (settings.name == AppRoutes.chatScreen) {
+      //     final args = settings.arguments;
+      //     return MaterialPageRoute(
+      //       builder: (context) => ChatScreen(
+      //         uid: args as String,
+      //       ),
+      //     );
+      //   }
+      //   return null;
+      // },
+      title: 'CONVO CONNECT',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

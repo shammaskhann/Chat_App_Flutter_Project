@@ -1,5 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class VoiceNoteChatWidget extends StatefulWidget {
   final dateTime;
@@ -90,7 +91,19 @@ class _VoiceNoteChatWidgetState extends State<VoiceNoteChatWidget> {
                         icon: const Icon(
                           Icons.play_arrow,
                           color: Colors.white,
-                        ))
+                        )),
+                const SizedBox(
+                  width: 5,
+                ),
+                Expanded(
+                  child: SvgPicture.asset(
+                    'assets/images/Audiowaveform.svg',
+                    color: Colors.white,
+                    // width: MediaQuery.of(context).size.width * 0.2,
+                    height: 20,
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ])),
         ],
       ),
