@@ -83,6 +83,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                             reverse: true,
                             itemCount: reversedMessages.length,
                             itemBuilder: (context, index) {
+                              // final isSeen = reversedMessages[index]['isSeen'];
                               final message =
                                   reversedMessages[index]['message'];
                               final senderUid =
@@ -103,19 +104,16 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                               if (isMedia) {
                                 if (mediaUrl.contains(".mp3")) {
                                   try {
-                                    // log("Accesing Voice Note Player");
-                                    // log("mediaUrl: $mediaUrl");
                                     return VoiceNoteChatWidget(
-                                        dateTime: dateTime,
-                                        isMyMessage: isMyMessage,
-                                        mediaUrl: mediaUrl);
+                                      dateTime: dateTime,
+                                      isMyMessage: isMyMessage,
+                                      mediaUrl: mediaUrl,
+                                    );
                                   } catch (e) {
                                     Utils.toastMessage(e.toString());
                                   }
                                   ;
                                 } else {
-                                  // log("mediaUrl: $mediaUrl");
-                                  // log("Accesing Image Viewer");
                                   return ImageChatWidget(
                                       dateTime: dateTime,
                                       isMyMessage: isMyMessage,
@@ -175,14 +173,18 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                         ),
                         child: IconButton(
                           onPressed: () {
-                            // print('Send Button Pressed Reciever${widget.uid}');
-                            chatController.sendGroupMessages(
-                                widget.group['name'],
-                                user!.uid,
-                                _messageController.text);
-                            // _chatController.sendMessage(
-                            //     widget.uid, _messageController.text);
-                            _messageController.clear();
+                            if (_messageController.text.isEmpty) {
+                              return;
+                            } else {
+                              // print('Send Button Pressed Reciever${widget.uid}');
+                              chatController.sendGroupMessages(
+                                  widget.group['name'],
+                                  user!.uid,
+                                  _messageController.text);
+                              // _chatController.sendMessage(
+                              //     widget.uid, _messageController.text);
+                              _messageController.clear();
+                            }
                           },
                           icon: const Icon(
                             Icons.send,

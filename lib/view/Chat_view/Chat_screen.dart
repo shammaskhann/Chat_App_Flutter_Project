@@ -132,9 +132,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           if (mediaUrl.contains(".mp3")) {
                             try {
                               return VoiceNoteChatWidget(
-                                  dateTime: dateTime,
-                                  isMyMessage: isMyMessage,
-                                  mediaUrl: mediaUrl);
+                                dateTime: dateTime,
+                                isMyMessage: isMyMessage,
+                                mediaUrl: mediaUrl,
+                                isSeen: isSeen,
+                              );
                             } catch (e) {
                               Utils.toastMessage(e.toString());
                             }
@@ -245,10 +247,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       child: IconButton(
                         onPressed: () {
+                          if(_messageController.text.isEmpty){
+                            return;
+                          }else{
                           print('Send Button Pressed Reciever${widget.uid}');
                           _chatController.sendMessage(
                               widget.uid, _messageController.text);
                           _messageController.clear();
+                          }
                         },
                         icon: const Icon(
                           Icons.send,

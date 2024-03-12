@@ -113,8 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         if (user!.uid ==
                                             groupIndivisual['users'][i]
                                                 ['uid']) {
-                                          return ChatroomTile(
-                                            group: groupIndivisual,
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8.0),
+                                            child: ChatroomTile(
+                                              group: groupIndivisual,
+                                            ),
                                           );
                                         }
                                       }

@@ -213,36 +213,36 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                       )),
                                 ),
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    // Container(
-                                    //   padding: const EdgeInsets.only(right: 5),
-                                    //   child: Switch(
-                                    //       inactiveTrackColor:
-                                    //           AppColors.silverGray,
-                                    //       activeColor: AppColors.luminousGreen,
-                                    //       value: loginController.isRememberMe,
-                                    //       onChanged: (value) {
-                                    //         loginController.isRememberMe =
-                                    //             value;
-                                    //         setState(() {});
-                                    //       }),
-                                    // ),
-                                    // const Text(
-                                    //   'Remember me',
-                                    //   style: AppTextStyle.subtitle,
-                                    // ),
-                                    const Spacer(),
-                                    TextButton(
-                                        onPressed: () {},
-                                        child: const Text(
-                                          'Forgot Password',
-                                          style: AppTextStyle.subtitle,
-                                        )),
-                                  ],
-                                ),
+                                // Row(
+                                //   mainAxisSize: MainAxisSize.min,
+                                //   mainAxisAlignment: MainAxisAlignment.start,
+                                //   children: [
+                                //     // Container(
+                                //     //   padding: const EdgeInsets.only(right: 5),
+                                //     //   child: Switch(
+                                //     //       inactiveTrackColor:
+                                //     //           AppColors.silverGray,
+                                //     //       activeColor: AppColors.luminousGreen,
+                                //     //       value: loginController.isRememberMe,
+                                //     //       onChanged: (value) {
+                                //     //         loginController.isRememberMe =
+                                //     //             value;
+                                //     //         setState(() {});
+                                //     //       }),
+                                //     // ),
+                                //     // const Text(
+                                //     //   'Remember me',
+                                //     //   style: AppTextStyle.subtitle,
+                                //     // ),
+                                //     const Spacer(),
+                                //     TextButton(
+                                //         onPressed: () {},
+                                //         child: const Text(
+                                //           'Forgot Password',
+                                //           style: AppTextStyle.subtitle,
+                                //         )),
+                                //   ],
+                                // ),
                                 //Login Button
                                 CustomButton(
                                   title: 'Login',

@@ -82,10 +82,17 @@ class MessengerTile extends StatelessWidget {
                   String msg = snapshot.data!.docs[0]['message'];
                   timestamp = snapshot.data!.docs[0]['timestamp'];
                   if (isMedia) {
-                    return const Text(
-                      "Photo",
-                      style: AppTextStyle.MessageTilesubtitle,
-                    );
+                    if (msg.contains('.mp3')) {
+                      return const Text(
+                        "Voice Note",
+                        style: AppTextStyle.MessageTilesubtitle,
+                      );
+                    } else {
+                      return const Text(
+                        "Photo",
+                        style: AppTextStyle.MessageTilesubtitle,
+                      );
+                    }
                   }
                   return Text(
                     msg,
