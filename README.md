@@ -1,59 +1,38 @@
+# Convo-Connect (Chat App)
 
-# Inventory Mangement (Customer/Admin Panel)
+Welcome to the Convo-Connect repository! This feature-rich chat application is built using Flutter for the front end and Firebase for the backend, offering a seamless real-time messaging experience. Whether it's exchanging text messages, voice notes, images, or videos, this app has you covered. Additionally, it includes features like saving images to the gallery and group chat functionalities.
 
-This project is a comprehensive Inventory Management Desktop Application, developed as part of a DBMS course. It showcases the use of cutting-edge technologies such as Flutter, NodeJS, and SQL Server to create a robust and efficient inventory management solution. The application effectively manages various aspects of inventory operations, including customer management, product tracking, order processing, and supplier coordination.
+## Features
 
-# Features
-- Customer Management: Add, update, and track customer information.
-- Product Management: Maintain product details, categories, and stock levels.
-- Order Management: Create and manage customer orders, including payment processing and shipment tracking.
-- Payment Handling: Integrate various payment methods and manage transactions.
-- Shipment Tracking: Monitor shipment status and delivery details.
-- Supplier Management: Keep track of supplier information and manage purchase orders.
-- Discount Codes and Gift Cards: Implement and manage discount codes and gift cards.
-- Inventory Tracking: Keep an accurate count of inventory, track stock levels, and manage purchase orders.
-# Technologies used
-# Frontend (Flutter)
-- Flutter: A UI toolkit for building natively compiled applications for mobile, web, and desktop from a single codebase.
-- GetX: A state management solution for Flutter, providing high performance and a simplified development experience.
-- Charts and Graphs: Dynamic visual representation of data for better insights and decision-making.
-#
+- **Real-Time Messaging**: Send and receive messages instantly.
+- **Voice Notes**: Record and send voice messages.
+- **Image and Video Sharing**: Share images and videos effortlessly.
+- **Group Chats**: Create and manage group conversations.
+- **Media Saving**: Save images directly to your gallery.
 
-# Backend (NodeJS)
-- NodeJS with Express: Server-side framework for building fast and scalable web applications and APIs.
-- RESTful APIs: Implemented for seamless communication between frontend and backend.
-- Deployment: Deployed on Vercel for a scalable and efficient deployment process.
-#
+## Technologies Used
 
-# Database (SQL SERVER)
-- SQL Server: Designed to handle the application's data needs with advanced features.
-- Triggers: Automated responses to specific changes in the database.
-- Scalar and Inline Functions: Customized functions to enhance database performance.
-- Stored Procedures: Precompiled collections of SQL statements for efficient data management.
+### Frontend (Flutter)
 
-<h2>🚀 Demo</h2>
+- **Flutter**: A UI toolkit for building natively compiled applications for mobile, web, and desktop from a single codebase.
 
-[https://shammaskhann.github.io/deploy\_inv\_mangement/](https://shammaskhann.github.io/deploy_inv_mangement/)
+### Backend (Firebase)
 
-# Project Screenshots:
+- **Firebase Authentication**: Manage user authentication with ease.
+- **Firebase Firestore**: Real-time database to store and sync data across all clients.
+- **Firebase Storage**: Store and serve user-generated content like images and videos.
 
-<img src="https://i.postimg.cc/7LSHPQf0/Screenshot-2024-06-12-022009.png " alt="project-screenshot" width="500" height="800/">
+## 🚀 Demo
 
-<img src="https://i.postimg.cc/qR0kNX3Y/Screenshot-2024-06-12-022944.png " alt="project-screenshot" width="1400" height="500/">
+Check out the live demo: [Convo-Connect Demo]
 
-<img src="https://i.postimg.cc/NGdg0XfJ/Screenshot-2024-06-12-024720.png " alt="project-screenshot" width="1400" height="500/">
+## Project Screenshots
 
-<img src="https://i.postimg.cc/PJ5T4XKQ/Screenshot-2024-06-12-024740.png " alt="project-screenshot" width="1400" height="500/">
+![Screenshot 1](https://i.postimg.cc/7LSHPQf0/Screenshot-2024-06-12-022009.png)
+![Screenshot 2](https://i.postimg.cc/qR0kNX3Y/Screenshot-2024-06-12-022944.png)
+![Screenshot 3](https://i.postimg.cc/NGdg0XfJ/Screenshot-2024-06-12-024720.png)
+![Screenshot 4](https://i.postimg.cc/PJ5T4XKQ/Screenshot-2024-06-12-024740.png)
+![Screenshot 5](https://i.postimg.cc/brV8V7Bc/Screenshot-2024-06-12-024813.png)
+![Screenshot 6](https://i.postimg.cc/ZRcJpBPq/Screenshot-2024-06-12-024826.png)
 
-<img src="https://i.postimg.cc/brV8V7Bc/Screenshot-2024-06-12-024813.png " alt="project-screenshot" width="1400" height="500/">
-
-<img src="https://i.postimg.cc/ZRcJpBPq/Screenshot-2024-06-12-024826.png" alt="project-screenshot" width="1400" height="1920 /">
-
-
-
-
-
-
-
-  #
- <p align="center"><img src="https://socialify.git.ci/shammaskhann/Inventory_Mangement_DesktopApp_Flutter/image?font=Jost&amp;language=1&amp;name=1&amp;owner=1&amp;pattern=Solid&amp;stargazers=1&amp;theme=Dark" alt="project-image"></p> 
+Feel free to explore the code, contribute, and provide feedback!
