@@ -37,7 +37,7 @@ This project is a comprehensive Inventory Management Desktop Application, develo
 
 # Project Screenshots:
 
-<img src="https://i.postimg.cc/7LSHPQf0/Screenshot-2024-06-12-022009.png " alt="project-screenshot" width="800" height="1200/">
+<img src="https://i.postimg.cc/7LSHPQf0/Screenshot-2024-06-12-022009.png " alt="project-screenshot" width="600" height="800/">
 
 <img src="https://i.postimg.cc/qR0kNX3Y/Screenshot-2024-06-12-022944.png " alt="project-screenshot" width="1400" height="500/">
 
