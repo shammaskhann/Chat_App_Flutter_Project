@@ -150,6 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               return ListView.builder(
                                 itemCount: snapshot.data.docs.length,
                                 itemBuilder: (context, index) {
+                                  log('snapshot: ${snapshot.data.docs[index]}');
                                   if (user!.uid !=
                                       snapshot.data.docs[index]['uid']) {
                                     return MessengerTile(

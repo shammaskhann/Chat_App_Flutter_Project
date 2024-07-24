@@ -2,10 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_project_app/constant/routes.dart';
+import 'package:flutter_firebase_project_app/controllers/NotificationController/notification_controller.dart';
 import 'package:flutter_firebase_project_app/firebase_options.dart';
+import 'package:flutter_firebase_project_app/services/Notification_Services/Notification_Helper.dart';
 import 'package:flutter_firebase_project_app/view/Chat_view/Chat_screen.dart';
 import 'package:flutter_firebase_project_app/view/Login_View/login_screen.dart';
 import 'package:flutter_firebase_project_app/view/Signup_View/signup_screen.dart';
+import 'package:get/get.dart';
 
 import 'view/Home_View/home_screen.dart';
 import 'view/Splash_View/Splash_Screen.dart';
@@ -15,6 +18,20 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  final messaging = FirebaseMessaging.instance;
+
+  final settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  String? token = await messaging.getToken();
+  NotifyHelper().init();
+
   runApp(const MyApp());
 }
 
@@ -74,45 +91,6 @@ class MyApp extends StatelessWidget {
               )
             : null;
       },
-      // onGenerateRoute: (settings) {
-      //   if (settings.name == AppRoutes.splashScreen) {
-      //     return PageRouteBuilder(
-      //       transitionsBuilder:
-      //           (context, animation, secondaryAnimation, child) {
-      //         return FadeTransition(
-      //           opacity: animation,
-      //           child: child,
-      //         );
-      //       },
-      //       pageBuilder: (context, animation, secondaryAnimation) =>
-      //           const SplashScreen(),
-      //     );
-      //   }
-      //   if (settings.name == AppRoutes.loginScreen) {
-      //     return PageRouteBuilder(
-      //         pageBuilder: (context, animation, secondaryAnimation) =>
-      //             const LoginScreen());
-      //   }
-      //   if (settings.name == AppRoutes.signupScreen) {
-      //     return MaterialPageRoute(
-      //       builder: (context) => const SignupScreen(),
-      //     );
-      //   }
-      //   if (settings.name == AppRoutes.homeScreen) {
-      //     return MaterialPageRoute(
-      //       builder: (context) => const HomeScreen(),
-      //     );
-      //   }
-      //   if (settings.name == AppRoutes.chatScreen) {
-      //     final args = settings.arguments;
-      //     return MaterialPageRoute(
-      //       builder: (context) => ChatScreen(
-      //         uid: args as String,
-      //       ),
-      //     );
-      //   }
-      //   return null;
-      // },
       title: 'CONVO CONNECT',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),

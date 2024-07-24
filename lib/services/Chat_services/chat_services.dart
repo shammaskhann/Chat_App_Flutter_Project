@@ -70,6 +70,17 @@ class ChatServices {
         .snapshots();
   }
 
+  //Check for the Last Message sent by anyone to user that is unread to show in notification
+  Stream<QuerySnapshot<Map<String, dynamic>>> getChatMsgStreamNotifier(
+      String chatDocumentID) {
+    return chatCollection
+        .doc(chatDocumentID)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .snapshots();
+  }
+
   Future<void> markChatAsRead(String chatID) async {
     final messagesCollection =
         chatCollection.doc(chatID).collection('messages');

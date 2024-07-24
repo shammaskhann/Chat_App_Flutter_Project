@@ -22,7 +22,7 @@ class _MediaPopUpMenuState extends State<MediaPopUpMenu> {
   Widget build(BuildContext context) {
     ChatController _chatController = ChatController();
     return FocusedMenuHolder(
-      blurSize: 10.0,
+      blurSize: 5.0,
       menuOffset: 10.0,
       animateMenuItems: true,
       menuWidth: MediaQuery.of(context).size.width * 0.50,

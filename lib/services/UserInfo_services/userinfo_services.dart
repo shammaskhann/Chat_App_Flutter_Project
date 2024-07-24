@@ -16,4 +16,12 @@ class UserInfoServices {
     AvatarController avatarController = AvatarController();
     return avatarController.getAvatar(uid);
   }
+
+  Future<String> getOtherUserName(String otherUid) async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(otherUid)
+        .get();
+    return doc['name'];
+  }
 }
